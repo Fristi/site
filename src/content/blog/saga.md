@@ -85,7 +85,7 @@ def run: F[A] = decide { case (a, _) => F.pure(a) }
 
 As you can see `Saga` is a useful tool when interacting with multiple APIs which are crossing an asynchronous boundary and might not offer transactional guarantees. It might not be the best solution, but in a lot of cases you don't have a better choice, I guess (welcome to the microservice/API era)!
 
-If you want to have a closer look at how that's done or have feedback. Have a look at the source code on [Github](https://github.com/vectos/goedverhaal).
+If you want to have a closer look at how that's done or have feedback. Have a look at the source code on [Github](https://github.com/Fristi/goedverhaal).
 
 Actually someone developed a ZIO version of this: [zio-saga](https://github.com/VladKopanev/zio-saga)
 

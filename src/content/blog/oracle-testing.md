@@ -314,4 +314,4 @@ By using the oracle we solve a few problems
 - We assert encoding/decoding symmetry from our domain model. You might miss out on decoding existing entries in the database though.
 - In the service layer tests, we don't use mocks, but in-memory variants which mirror the behavior of the real implementation asserted in the data layer tests
 
-I've actually coded the `Septic` thing into a repository and you can find it up [here](https://github.com/vectos/septic/). It's a proof of concept, but I've used this methodology at DHL Netherlands. It needs some work on testing all the combinators at `Septic`. If someone wants to continue the work release this to Maven Central go ahead. It would be great to mention my work if you do.
+I've actually coded the `Septic` thing into a repository and you can find it up [here](https://github.com/Fristi/septic/). It's a proof of concept, but I've used this methodology at DHL Netherlands. It needs some work on testing all the combinators at `Septic`. If someone wants to continue the work release this to Maven Central go ahead. It would be great to mention my work if you do.

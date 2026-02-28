@@ -9,7 +9,7 @@ description: "My first experience writing a REST API in Rust as a Functional Sca
 
 Over the past few months, I decided to pick up on learning Rust again. I've coded a bare-metal Rust firmware which was a [successful project](/blog/baremetalrust-esp32).
 
-Writing a REST API in the software industry is a common thing and I wondered how it would work in Rust. I decided to write a slimmed-down version of [Confluent's schema registry](https://docs.confluent.io/platform/current/schema-registry/index.html) in Rust. The source code can be found [here](https://github.com/vectos/rs-schema-registry).
+Writing a REST API in the software industry is a common thing and I wondered how it would work in Rust. I decided to write a slimmed-down version of [Confluent's schema registry](https://docs.confluent.io/platform/current/schema-registry/index.html) in Rust. The source code can be found [here](https://github.com/Fristi/rs-schema-registry).
 
 In this blog post, I'll go over what I liked about it and how I view Rust as a Functional Scala developer.
 
