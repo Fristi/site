@@ -1,4 +1,4 @@
-# Vectos site
+# Mark de Jong site
 
 ## 🚀 Project Structure
 
