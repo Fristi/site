@@ -19,12 +19,12 @@ var activeStyles = "";
 
 if (!isMobile) {
   activeStyles = isActive
-    ? "border-indigo-500 text-gray-900"
-    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700";
+    ? "border-primary text-primary"
+    : "border-transparent text-base-content/70 hover:border-base-content/30 hover:text-base-content";
 } else {
   activeStyles = isActive
-    ? "bg-indigo-50 border-indigo-500 text-indigo-700"
-    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700";
+    ? "bg-primary/10 border-primary text-primary"
+    : "border-transparent text-base-content/70 hover:bg-base-200 hover:border-base-content/30 hover:text-base-content";
 }
 
 const styles = baseStyles + " " + activeStyles;

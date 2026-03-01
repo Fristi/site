@@ -7,7 +7,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://vectos.net",
+  site: "https://markdejong.org",
   integrations: [tailwind(), react(), mdx()],
   markdown: {
     shikiConfig: {

@@ -1,11 +1,20 @@
-/** @type {import('tailwindcss').Config} */
-const defaultTheme = require("tailwindcss/defaultTheme");
+import defaultTheme from "tailwindcss/defaultTheme.js";
+import daisyui from "daisyui";
+import typography from "@tailwindcss/typography";
 
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     fontFamily: {
       mono: ["Iosevka", ...defaultTheme.fontFamily.mono],
+      condensed: [
+        '"IBM Plex Sans Condensed"',
+        '"Barlow Condensed"',
+        '"Roboto Condensed"',
+        '"HelveticaNeue-CondensedBold"',
+        ...defaultTheme.fontFamily.sans,
+      ],
     },
     extend: {
       animation: {
@@ -23,5 +32,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [typography, daisyui],
+  daisyui: {
+    themes: ["caramellatte"],
+  },
 };

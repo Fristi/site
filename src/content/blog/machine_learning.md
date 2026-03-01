@@ -67,4 +67,4 @@ Over the past period, I've seen some interesting Machine Learning applications. 
 
 ## Conclusion
 
-As you can see Machine Learning is an interesting field. Have you thought about what it can do it for you? Mark de Jong (at Vectos) recently completed a course on Machine Learning at Coursera. If you have some ideas, let's have a coffee!
+As you can see Machine Learning is an interesting field. Have you thought about what it can do it for you? Mark de Jong recently completed a course on Machine Learning at Coursera. If you have some ideas, let's have a coffee!

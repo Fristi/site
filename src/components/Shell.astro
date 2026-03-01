@@ -1,141 +1,67 @@
 ---
 import HeaderLink from "../components/HeaderLink.astro";
-import Meteors from "../components/Meteors.astro";
 import Footer from "../components/Footer.astro";
 ---
 
-<style>
-  .waves {
-    background: url(/img/bg.svg) no-repeat;
-  }
-</style>
 <>
-  <body class="antialiased font-sans">
-    <!-- This example requires Tailwind CSS v2.0+ -->
-    <nav class="bg-white shadow">
-      <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div class="relative flex justify-between h-16">
-          <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <!-- Mobile menu button -->
-            <button
-              id="nav-button"
-              type="button"
-              class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
+  <body
+    data-theme="caramellatte"
+    class="bg-base-200 font-sans text-base-content antialiased"
+  >
+    <div class="mx-auto min-h-screen max-w-7xl p-4 md:p-6">
+      <div class="card bg-base-100 shadow-sm">
+        <nav class="navbar border-b border-base-300 px-4 md:px-6">
+          <div class="flex-1">
+            <a
+              href="/"
+              class="btn btn-ghost font-condensed text-lg font-black uppercase tracking-normal"
             >
-              <span class="sr-only">Open main menu</span>
-              <svg
-                id="menu-icon-closed"
-                class="block h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-              <svg
-                id="menu-icon-open"
-                class="hidden h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
+              Mark de Jong
+            </a>
           </div>
-          <div
-            class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start"
+
+          <button
+            id="nav-button"
+            type="button"
+            class="btn btn-primary btn-sm md:hidden"
+            aria-controls="mobile-menu"
+            aria-expanded="false"
           >
-            <div class="flex-shrink-0 flex items-center">
-              <a href="/"
-                ><img
-                  class="block lg:hidden h-8 w-auto"
-                  src="/img/logo.png"
-                  alt="Vectos"
-                /></a
-              >
-              <a href="/"
-                ><img
-                  class="hidden lg:block h-8 mt-2 w-auto"
-                  src="/img/logo.png"
-                  alt="Vectos"
-                /></a
-              >
-            </div>
-            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <HeaderLink href="/">Home</HeaderLink>
-              <HeaderLink href="/project">Projects</HeaderLink>
-              <HeaderLink href="/about">About</HeaderLink>
-              <HeaderLink href="/blog">Blog</HeaderLink>
-            </div>
+            Menu
+          </button>
+
+          <div class="hidden items-center gap-2 md:flex">
+            <HeaderLink href="/">Home</HeaderLink>
+            <HeaderLink href="/project">Projects</HeaderLink>
+            <HeaderLink href="/blog">Blog</HeaderLink>
+          </div>
+        </nav>
+
+        <div id="nav-bar" class="hidden border-b border-base-300 px-4 py-3 md:hidden">
+          <div class="flex flex-col gap-2">
+            <HeaderLink href="/">Home</HeaderLink>
+            <HeaderLink href="/project">Projects</HeaderLink>
+            <HeaderLink href="/blog">Blog</HeaderLink>
           </div>
         </div>
-      </div>
 
-      <!-- Mobile menu, show/hide based on menu state. -->
-      <div id="nav-bar" class="hidden">
-        <div class="pt-2 pb-3 space-y-1">
-          <HeaderLink href="/">Home</HeaderLink>
-          <HeaderLink href="/project">Projects</HeaderLink>
-          <HeaderLink href="/about">About</HeaderLink>
-          <HeaderLink href="/blog">Blog</HeaderLink>
+        <main class="px-4 py-6 md:px-6 md:py-8">
+          <slot />
+        </main>
+
+        <div class="border-t border-base-300 px-4 py-4 md:px-6">
+          <Footer />
         </div>
       </div>
-    </nav>
-
-    <div class="relative overflow-hidden waves">
-      <Meteors number={40} />
-      <slot />
     </div>
-
-    <Footer />
   </body>
 
-  <script
-    src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-    crossorigin="anonymous"
-  ></script>
   <script>
-    $(document).ready(function () {
-      var shown = false;
-      var navBar = $("#nav-bar");
-      var navIconClosed = $("#menu-icon-closed");
-      var navIconOpen = $("#menu-icon-open");
+    const navButton = document.getElementById("nav-button");
+    const navBar = document.getElementById("nav-bar");
 
-      function hide(el) {
-        el.addClass("hidden").removeClass("block");
-      }
-      function show(el) {
-        el.addClass("block").removeClass("hidden");
-      }
-
-      $("#nav-button").click(function () {
-        shown = !shown;
-        if (shown) {
-          show(navBar);
-          hide(navIconClosed);
-          show(navIconOpen);
-        } else {
-          hide(navBar);
-          show(navIconClosed);
-          hide(navIconOpen);
-        }
-      });
+    navButton?.addEventListener("click", () => {
+      navBar?.classList.toggle("hidden");
     });
   </script>
 </>
