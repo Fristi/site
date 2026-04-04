@@ -8,18 +8,15 @@ type Props = {
 const { image, name, description } = Astro.props;
 ---
 
-<div class="flex">
-  <div class="flex-shrink-0">
-    <div
-      class="flex items-center justify-center h-24 w-24 rounded-md bg-gray-100 text-white"
-    >
-      <img src={image} />
+<div class="relative flex gap-5 rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6 transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
+  <div class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]" aria-hidden />
+  <div class="relative flex-shrink-0">
+    <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-highest">
+      <img src={image} alt={name} class="h-10 w-10 object-contain" />
     </div>
   </div>
-  <div class="ml-4">
-    <dt class="text-lg leading-6 font-medium text-gray-900">{name}</dt>
-    <dd class="mt-2 text-base text-gray-500">
-      {description}
-    </dd>
+  <div class="relative">
+    <h3 class="font-display font-semibold text-sm text-on-surface">{name}</h3>
+    <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">{description}</p>
   </div>
 </div>

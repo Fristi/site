@@ -11,21 +11,14 @@ const link = href?.toString();
 const { pathname } = Astro.url;
 
 const isActive = link === pathname || link === pathname.replace(/\/$/, "");
+
 const baseStyles = !isMobile
-  ? "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-  : "block pl-3 pr-4 py-2 border-l-4 text-base font-medium";
+  ? "inline-flex items-center px-3 py-1.5 rounded-xl text-sm font-medium transition-colors"
+  : "block px-3 py-2 rounded-xl text-sm font-medium transition-colors";
 
-var activeStyles = "";
-
-if (!isMobile) {
-  activeStyles = isActive
-    ? "border-indigo-600 text-indigo-600"
-    : "border-transparent text-gray-600 hover:border-gray-400 hover:text-gray-900";
-} else {
-  activeStyles = isActive
-    ? "bg-indigo-600/10 border-indigo-600 text-indigo-600"
-    : "border-transparent text-gray-600 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-900";
-}
+const activeStyles = isActive
+  ? "text-primary bg-primary/10"
+  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-high/50";
 
 const styles = baseStyles + " " + activeStyles;
 ---

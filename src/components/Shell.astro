@@ -4,52 +4,54 @@ import Footer from "../components/Footer.astro";
 ---
 
 <>
-  <body class="bg-gray-100 font-sans text-gray-900 antialiased">
-    <div class="mx-auto min-h-screen max-w-7xl p-4 md:p-6">
-      <div class="rounded-2xl bg-white shadow-sm">
-        <nav class="flex items-center border-b border-gray-200 px-4 md:px-6 h-16">
-          <div class="flex-1">
-            <a
-              href="/"
-              class="inline-flex items-center px-3 py-2 rounded-lg font-condensed text-lg font-black uppercase tracking-normal hover:bg-gray-100 transition-colors"
-            >
-              Mark de Jong
-            </a>
-          </div>
+  <body class="bg-void font-body text-on-surface antialiased">
+    <div class="relative mx-auto min-h-screen max-w-7xl">
+      <!-- Atmospheric background blobs -->
+      <div aria-hidden class="pointer-events-none fixed inset-0 overflow-hidden -z-10">
+        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-primary opacity-[0.04] blur-[100px]" />
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-secondary opacity-[0.04] blur-[100px]" />
+      </div>
 
-          <button
-            id="nav-button"
-            type="button"
-            class="inline-flex items-center px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg md:hidden hover:bg-indigo-700 transition-colors"
-            aria-controls="mobile-menu"
-            aria-expanded="false"
+      <nav class="sticky top-0 z-50 flex items-center border-b border-outline-variant/20 bg-void/80 backdrop-blur-[12px] px-4 md:px-8 h-16">
+        <div class="flex-1">
+          <a
+            href="/"
+            class="inline-flex items-center px-3 py-1.5 rounded-xl font-display font-black uppercase tracking-wide text-sm text-on-surface hover:text-primary transition-colors"
           >
-            Menu
-          </button>
-
-          <div class="hidden items-center gap-2 md:flex">
-            <HeaderLink href="/">Home</HeaderLink>
-            <HeaderLink href="/project">Projects</HeaderLink>
-            <HeaderLink href="/blog">Blog</HeaderLink>
-          </div>
-        </nav>
-
-        <div id="nav-bar" class="hidden border-b border-gray-200 px-4 py-3 md:hidden">
-          <div class="flex flex-col gap-2">
-            <HeaderLink href="/">Home</HeaderLink>
-            <HeaderLink href="/project">Projects</HeaderLink>
-            <HeaderLink href="/blog">Blog</HeaderLink>
-          </div>
+            Mark de Jong
+          </a>
         </div>
 
-        <main class="px-4 py-6 md:px-6 md:py-8">
-          <slot />
-        </main>
+        <button
+          id="nav-button"
+          type="button"
+          class="inline-flex items-center px-3 py-1 text-sm bg-primary text-on-primary font-medium rounded-xl md:hidden hover:brightness-110 transition-all"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          Menu
+        </button>
 
-        <div class="border-t border-gray-200 px-4 py-4 md:px-6">
-          <Footer />
+        <div class="hidden items-center gap-1 md:flex">
+          <HeaderLink href="/">Home</HeaderLink>
+          <HeaderLink href="/project">Projects</HeaderLink>
+          <HeaderLink href="/blog">Blog</HeaderLink>
+        </div>
+      </nav>
+
+      <div id="nav-bar" class="hidden border-b border-outline-variant/20 bg-void/90 px-4 py-3 md:hidden">
+        <div class="flex flex-col gap-1">
+          <HeaderLink href="/">Home</HeaderLink>
+          <HeaderLink href="/project">Projects</HeaderLink>
+          <HeaderLink href="/blog">Blog</HeaderLink>
         </div>
       </div>
+
+      <main class="px-4 py-10 md:px-8 md:py-16">
+        <slot />
+      </main>
+
+      <Footer />
     </div>
   </body>
 
