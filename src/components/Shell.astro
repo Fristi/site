@@ -4,17 +4,14 @@ import Footer from "../components/Footer.astro";
 ---
 
 <>
-  <body
-    data-theme="light"
-    class="bg-base-200 font-sans text-base-content antialiased"
-  >
+  <body class="bg-gray-100 font-sans text-gray-900 antialiased">
     <div class="mx-auto min-h-screen max-w-7xl p-4 md:p-6">
-      <div class="card bg-base-100 shadow-sm">
-        <nav class="navbar border-b border-base-300 px-4 md:px-6">
+      <div class="rounded-2xl bg-white shadow-sm">
+        <nav class="flex items-center border-b border-gray-200 px-4 md:px-6 h-16">
           <div class="flex-1">
             <a
               href="/"
-              class="btn btn-ghost font-condensed text-lg font-black uppercase tracking-normal"
+              class="inline-flex items-center px-3 py-2 rounded-lg font-condensed text-lg font-black uppercase tracking-normal hover:bg-gray-100 transition-colors"
             >
               Mark de Jong
             </a>
@@ -23,7 +20,7 @@ import Footer from "../components/Footer.astro";
           <button
             id="nav-button"
             type="button"
-            class="btn btn-primary btn-sm md:hidden"
+            class="inline-flex items-center px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg md:hidden hover:bg-indigo-700 transition-colors"
             aria-controls="mobile-menu"
             aria-expanded="false"
           >
@@ -37,7 +34,7 @@ import Footer from "../components/Footer.astro";
           </div>
         </nav>
 
-        <div id="nav-bar" class="hidden border-b border-base-300 px-4 py-3 md:hidden">
+        <div id="nav-bar" class="hidden border-b border-gray-200 px-4 py-3 md:hidden">
           <div class="flex flex-col gap-2">
             <HeaderLink href="/">Home</HeaderLink>
             <HeaderLink href="/project">Projects</HeaderLink>
@@ -49,7 +46,7 @@ import Footer from "../components/Footer.astro";
           <slot />
         </main>
 
-        <div class="border-t border-base-300 px-4 py-4 md:px-6">
+        <div class="border-t border-gray-200 px-4 py-4 md:px-6">
           <Footer />
         </div>
       </div>

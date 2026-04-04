@@ -31,7 +31,6 @@
     "tech-stack-icons": "^3.3.2"
   },
   "devDependencies": {
-    "daisyui": "^5.5.19",
     "prettier": "2.8.8",
     "prettier-plugin-astro": "^0.8.0"
   }

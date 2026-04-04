@@ -32,7 +32,4 @@ export default {
     },
   },
   plugins: [typography],
-  daisyui: {
-    themes: ["caramellatte"],
-  },
 };
