@@ -1,9 +1,8 @@
 ---
 import { CollectionEntry, getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
-import Aside from "../../components/Aside.astro";
-import ServiceLink from "../../components/ServiceLink.astro";
 import YouTubePlayer from "../../components/YouTubePlayer.astro";
+import Aside from "../../components/Aside.astro";
 
 const posts = await getCollection("blog");
 type Props = CollectionEntry<"blog">;
@@ -15,5 +14,5 @@ const { Content } = await post.render();
 ---
 
 <BlogPost {...post.data} slug={post.slug}>
-  <Content components={{ Aside: Aside, ServiceLink: ServiceLink, YouTubePlayer: YouTubePlayer }} />
+  <Content components={{ Aside: Aside, YouTubePlayer: YouTubePlayer }} />
 </BlogPost>

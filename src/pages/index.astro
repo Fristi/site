@@ -1,11 +1,6 @@
 ---
 import Client from "../components/Client.astro";
 import Layout from "../components/Layout.astro";
-import Mark from "../components/Mark.astro";
-import TextGenerating from "../components/react/TextGenerating";
-import TechMarque from "../components/TechMarque.astro";
-import Service from "../components/Service.astro";
-import ServiceCard from "../components/ServiceCard.astro";
 
 const talks = [
   {
@@ -17,7 +12,8 @@ const talks = [
   {
     date: "2023",
     name: "refined",
-    description: "During amsterdam.scala meetup at vandebron I gave a introduction talk to refinement types in Scala",
+    description:
+      "During amsterdam.scala meetup at vandebron I gave a introduction talk to refinement types in Scala",
     url: "https://fristi.github.io/refined-deck",
   },
   {
@@ -29,19 +25,22 @@ const talks = [
   {
     date: "2022",
     name: "Bazel",
-    description: "At amsterdam.scala I gave an introduction talk about Bazel and Scala",
+    description:
+      "At amsterdam.scala I gave an introduction talk about Bazel and Scala",
     url: "https://fristi.github.io/bazel-deck",
   },
   {
     date: "2020",
     name: "cats",
-    description: "At DHL I gave a talk about the functional programming library cats in Scala",
+    description:
+      "At DHL I gave a talk about the functional programming library cats in Scala",
     url: "https://fristi.github.io/cats-deck",
   },
   {
     date: "2018",
     name: "http4s",
-    description: "At functional rotterdam meetup I gave a talk about http4s, a functional http server/client library written in Scala",
+    description:
+      "At functional rotterdam meetup I gave a talk about http4s, a functional http server/client library written in Scala",
     url: "https://fristi.github.io/http4s-deck",
   },
 ];
@@ -81,304 +80,349 @@ const openSourceProjects = [
     description:
       "A eDSL (embedded domain specific language) in Scala to map data structures to Avro encoders, decoders and schemas",
     url: "https://github.com/Fristi/formulation",
-  }
+  },
+];
+
+const certs = [
+  {
+    image: "/img/cert/nielsen-norman.png",
+    title: "Nielsen Norman / Interaction design",
+    description:
+      "Nielsen Norman Group, an elite firm dedicated to improving the everyday experience of using technology. I took courses on interaction design with the focus on apps.",
+  },
+  {
+    image: "/img/cert/coursera.png",
+    title: "Machine Learning by Andrew Ng",
+    description:
+      "Machine learning is the science of getting computers to act without being explicitly programmed. In the past decade, machine learning has given us self-driving cars, speech recognition, web search, etc.",
+  },
+  {
+    image: "/img/cert/ckad.png",
+    title: "CKAD - Certified Kubernetes Application Developer",
+    description:
+      "Be able to define application resources and use core primitives to build, monitor, and troubleshoot scalable applications and tools in Kubernetes.",
+  },
 ];
 ---
 
 <Layout>
-  <div class="mx-auto max-w-7xl px-4">
+  <!-- Hero -->
+  <section class="mt-8 lg:grid lg:grid-cols-2 lg:gap-16 items-start">
+    <div class="relative max-w-2xl">
+      <!-- Display heading -->
+      <h1
+        class="font-display font-extrabold text-[3.5rem] leading-[1.1] tracking-[-0.02em] text-on-surface"
+      >
+        Mark de Jong
+      </h1>
 
-  <div>
-    <div class="overflow-hidden lg:grid lg:grid-cols-2 lg:gap-4">
-      <div>
-        <div class="lg:self-center">
+      <!-- Body text -->
+      <p
+        class="mt-6 font-body text-base leading-relaxed text-on-surface-variant max-w-xl"
+      >
+        With over 13 years of professional experience, I've delivered projects
+        across diverse industries including renewable energy, logistics,
+        finance, healthcare, telecom, and education. From building
+        high-performance backends and large-scale billing systems, to crafting
+        custom CMS platforms and mobile apps, my work combines functional
+        programming principles with real-world impact.
+      </p>
 
-          <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            About
-          </p>
+      <p
+        class="mt-6 font-body text-base leading-relaxed text-on-surface-variant max-w-xl"
+      >
+        I've contributed to open-source Scala projects like Cats, Tapir, and
+        Doobie, and introduced novel ideas such as the Saga Monad (now adopted
+        in Arrow and ZIO). I'm driven by curiosity, and I enjoy solving hard
+        problems—whether it's optimizing protocols, designing internal DSLs, or
+        writing firmware in Rust for embedded devices.
+      </p>
 
-          <div class="mt-4 mb-4 text-sm text-gray-800">
-            <p class="mt-4 leading-6">
-              <strong>Mark de Jong</strong> is an experienced software engineer, which writes robust and scalable software, designs user-friendly
-              interfaces, very critical, mentors others, and reviews
-              code with care.
-            </p>
+      <!-- CTAs (primary button + glass button as anchor tags) -->
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href="/project"
+          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 bg-primary text-on-primary shadow-[0_0_20px_2px_rgba(153,247,255,0.25)] hover:shadow-[0_0_32px_4px_rgba(153,247,255,0.35)] hover:brightness-105"
+        >
+          View work
+        </a>
+        <a
+          href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 bg-surface-high/50 backdrop-blur-[16px] text-on-surface border border-outline-variant/20 hover:bg-surface-highest/60 hover:backdrop-blur-[20px]"
+        >
+          Get in touch
+        </a>
+      </div>
 
-            <p class="mt-4 leading-6">
-              With over 13 years of professional experience, I’ve delivered
-              projects across diverse industries including renewable energy,
-              logistics, finance, healthcare, telecom, and education. From
-              building high-performance backends and large-scale billing
-              systems, to crafting custom CMS platforms and mobile apps, my work
-              combines functional programming principles with real-world impact.
-            </p>
+      <!-- Social links -->
+      <div class="mt-10 flex gap-4">
+        <a
+          target="_blank"
+          href="https://github.com/Fristi"
+          class="text-on-surface-variant hover:text-primary transition-colors"
+          aria-label="GitHub"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </a>
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
+          class="text-on-surface-variant hover:text-primary transition-colors"
+          aria-label="LinkedIn"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+            ></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <!-- Sketch portrait — blends into background via multiply -->
+    <div class="mt-12 lg:mt-0">
+      <img
+        class="w-full rounded-2xl object-cover ring-1 ring-outline-variant/20"
+        src="/img/collage.jpg"
+        alt="Mark"
+      />
+    </div>
+  </section>
 
-            <p class="mt-4 leading-6">
-              I’ve contributed to open-source Scala projects mostly like Cats, Tapir, and
-              Doobie, and introduced novel ideas such as the Saga Monad (now
-              adopted in Arrow and ZIO). I'm driven by curiosity, and I enjoy
-              solving hard problems—whether it’s optimizing protocols, designing
-              internal DSLs, or writing firmware in Rust for embedded devices.
-            </p>
+  <!-- Tech Volunteer -->
+  <section class="mt-24">
+    <div class="mb-10">
+      <h2
+        class="font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface"
+      >
+        Tech volunteer
+      </h2>
+      <p class="mt-2 text-base text-on-surface-variant">
+        During the years I gave talks for free, contributed to OSS projects and
+        also had my own OSS projects
+      </p>
+    </div>
 
-            <p class="mt-4 leading-6">
-              In my professional career I have worked at various companies doing
-              diverse projects.
-            </p>
-
-            <ul class="mt-4 leading-6 list-disc list-inside">
-              <li>Development of custom content management systems</li>
-              <li>Development and moderation of community websites</li>
-              <li>Improving performance of existing software</li>
-              <li>High performance backends</li>
-              <li>Financial systems</li>
-              <li>Marketing pages</li>
-              <li>Single page web apps and mobile apps.</li>
-            </ul>
-
-            <p class="mt-4 leading-6">Next to all of this in my personal life I like to sport, travel and learn about new things</p>
-
-            <ul class="mt-4 flex space-x-5">
-            <li>
-              <a
-                target="_blank"
-                href="https://github.com/Fristi"
-                class="text-gray-500 hover:text-black"
-              >
-                <span class="sr-only">GitHub</span>
-                <svg
-                  class="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </a>
-            </li>
-            <li>
-              <a
-                target="_blank"
-                href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
-                class="text-gray-500 hover:text-black"
-              >
-                <span class="sr-only">LinkedIn</span>
-                <svg
-                  class="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-          </ul>
-          </div>
+    <div class="grid gap-8 lg:grid-cols-2">
+      <!-- Talks -->
+      <div
+        class="relative rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6"
+      >
+        <div
+          class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+          aria-hidden
+        >
         </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-display font-semibold text-lg text-on-surface">
+            Talks Given
+          </h3>
+        </div>
+        <p class="mt-3 text-sm text-on-surface-variant">
+          Mostly talks at meetups and companies
+        </p>
+        <ul class="mt-6 space-y-6">
+          {
+            talks.map((talk) => (
+              <li>
+                <p class="text-xs font-mono text-on-surface-variant/60">
+                  {talk.date}
+                </p>
+                <a
+                  href={talk.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="mt-1 block text-base font-semibold text-primary hover:text-primary-container transition-colors"
+                >
+                  {talk.name}
+                </a>
+                <p class="mt-1 text-sm text-on-surface-variant leading-relaxed">
+                  {talk.description}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <div class="mt-6 mr-6">
-        <img class="h-128 w-128 rounded-lg" src="/img/collage.jpg" alt="Mark" />
+
+      <!-- OSS -->
+      <div
+        class="relative rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6"
+      >
+        <div
+          class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-secondary to-primary opacity-[0.03]"
+          aria-hidden
+        >
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary/10 text-secondary flex-shrink-0"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-display font-semibold text-lg text-on-surface">
+            Open Source Projects
+          </h3>
+        </div>
+        <p class="mt-3 text-sm text-on-surface-variant">
+          Public work and contributions available online.
+        </p>
+        <ul class="mt-6 space-y-6">
+          {
+            openSourceProjects.map((project) => (
+              <li>
+                <p class="text-xs font-mono text-on-surface-variant/60">
+                  {project.date}
+                </p>
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="mt-1 block text-base font-semibold text-primary hover:text-primary-container transition-colors"
+                >
+                  {project.name}
+                </a>
+                <p class="mt-1 text-sm text-on-surface-variant leading-relaxed">
+                  {project.description}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
-  </div>
+  </section>
 
-    <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:text-center">
-        <p
-          class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-        >
-          Tech volunteer
-        </p>
-        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-          During the years I gave talks for free, contributed to OSS projects and also had my own OSS projects
-        </p>
-      </div>
-
-      <div class="mt-6 grid gap-8 lg:grid-cols-2">
-        <section>
-          <h2 class="text-2xl font-bold">Talks Given</h2>
-          <p class="mt-1 text-sm text-base-content/70">
-            Mostly talks at meetups and companies
-          </p>
-          <ul class="mt-4 space-y-5">
-            {
-              talks.map((talk) => (
-                <li>
-                  <p class="text-sm text-gray-400">{talk.date}</p>
-                  <a
-                    href={talk.url}
-                    class="mt-1 block text-lg font-bold text-indigo-500 hover:underline"
-                  >
-                    {talk.name}
-                  </a>
-                  <p class="mt-2 text-base text-gray-500">
-                    {talk.description}
-                  </p>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-bold">Open Source Projects</h2>
-          <p class="mt-1 text-sm text-base-content/70">
-            Public work and contributions available online.
-          </p>
-          <ul class="mt-4 space-y-5">
-            {
-              openSourceProjects.map((project) => (
-                <li>
-                  <p class="text-sm text-gray-400">{project.date}</p>
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    class="mt-1 block text-lg font-bold text-indigo-500 hover:underline"
-                  >
-                    {project.name}
-                  </a>
-                  <p class="mt-2 text-base text-gray-500">
-                    {project.description}
-                  </p>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-      </div>
+  <!-- Worked for -->
+  <section class="mt-24">
+    <div class="mb-10">
+      <h2
+        class="font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface"
+      >
+        Worked for
+      </h2>
+      <p class="mt-2 text-base text-on-surface-variant">
+        I served these employers to be successful in the digital world
+      </p>
     </div>
 
-    <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:text-center">
-        <p
-          class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-        >
-          Worked for
-        </p>
-        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-          I served these employers to be successful in the digital world
-        </p>
-      </div>
+    <div class="grid gap-6 md:grid-cols-2">
+      <Client
+        image="/img/companies/vandebron.png"
+        name="Vandebron"
+        description="Vandebron is a Dutch green energy marketplace that connects households and businesses directly with local renewable producers—like farmers with wind turbines, solar panels, or biogas—without owning any generation assets."
+      />
+      <Client
+        image="/img/companies/dhl.png"
+        name="DHL"
+        description="DHL German international courier, package delivery and express mail service. I've worked at DHL on several high-end web applications."
+      />
+      <Client
+        image="/img/companies/ing.png"
+        name="ING"
+        description="The ING Group is a Dutch multinational banking and financial services corporation. I've worked at ING on approval software."
+      />
+      <Client
+        image="/img/companies/veon.png"
+        name="Veon"
+        description="VEON is a Dutch-domiciled multinational telecommunication services. It predominantly operates services in the regions of Asia, Africa and Europe. I've worked at VEON on the top up transactional systems."
+      />
+      <Client
+        image="/img/companies/malmberg.svg"
+        name="Malmberg"
+        description="Malmberg is a Dutch company which creates educational software and books for schools. I've worked on Malmberg on a content management system (CMS) for educational software."
+      />
+    </div>
+  </section>
 
-      <div class="mt-10">
-        <dl
-          class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10"
-        >
-          <Client
-            image="/img/companies/vandebron.png"
-            name="Vandebron"
-            description="Vandebron is a Dutch green energy marketplace that connects households and businesses directly with local renewable producers—like farmers with wind turbines, solar panels, or biogas—without owning any generation assets."
-          />
-          <Client
-            image="/img/companies/dhl.png"
-            name="DHL"
-            description="DHL German international courier, package delivery and express mail service. I've worked at DHL on several high-end web applications."
-          />
-          <Client
-            image="/img/companies/ing.png"
-            name="ING"
-            description="The ING Group is a Dutch multinational banking and financial services corporation. I've worked at ING on approval software."
-          />
-          <Client
-            image="/img/companies/veon.png"
-            name="Veon"
-            description="VEON is a Dutch-domiciled multinational telecommunication services. It predominantly operates services in the regions of Asia, Africa and Europe. I've worked at VEON on the top up transactional systems."
-          />
-          <Client
-            image="/img/companies/malmberg.svg"
-            name="Malmberg"
-            description="Malmberg is a Dutch company which creates educational software and books for schools. I've worked on Malmberg on a content management system (CMS) for eductional software."
-          />
-        </dl>
-      </div>
+  <!-- Certified -->
+  <section class="mt-24">
+    <div class="mb-10">
+      <h2
+        class="font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface"
+      >
+        Certified
+      </h2>
+      <p class="mt-2 text-base text-on-surface-variant">
+        Driven to keep up with latest trends and technologies
+      </p>
     </div>
 
-    <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:text-center">
-        <p
-          class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-        >
-          Certified
-        </p>
-        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-          Driven to keep up with latest trends and technologies
-        </p>
-      </div>
-
-      <div class="mt-8">
-        <dl
-          class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10"
-        >
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <div
-                class="flex items-center justify-center h-24 w-24 rounded-md bg-gray-100 text-white"
-              >
-                <img src="/img/cert/nielsen-norman.png" />
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        certs.map((cert) => (
+          <div class="relative flex gap-5 rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6 transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
+            <div
+              class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+              aria-hidden
+            />
+            <div class="relative flex-shrink-0">
+              <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-highest">
+                <img
+                  src={cert.image}
+                  alt={cert.title}
+                  class="h-10 w-10 object-contain"
+                />
               </div>
             </div>
-            <div class="ml-4">
-              <dt class="text-lg leading-6 font-medium text-gray-900">
-                Nielsen Norman / Interaction design
-              </dt>
-              <dd class="mt-2 text-base text-gray-500">
-                Nielsen Norman Group, an elite firm dedicated to improving the
-                everyday experience of using technology. I took courses on
-                interaction design with the focus on apps.
-              </dd>
+            <div class="relative">
+              <h3 class="font-display font-semibold text-sm text-on-surface leading-snug">
+                {cert.title}
+              </h3>
+              <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">
+                {cert.description}
+              </p>
             </div>
           </div>
-
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <div
-                class="flex items-center justify-center h-24 w-24 rounded-md bg-gray-100 text-white"
-              >
-                <img src="/img/cert/coursera.png" />
-              </div>
-            </div>
-            <div class="ml-4">
-              <dt class="text-lg leading-6 font-medium text-gray-900">
-                Machine Learning by Andrew Ng
-              </dt>
-              <dd class="mt-2 text-base text-gray-500">
-                Machine learning is the science of getting computers to act
-                without being explicitly programmed. In the past decade, machine
-                learning has given us self-driving cars, speech recognition, web
-                search, etc.
-              </dd>
-            </div>
-          </div>
-
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <div
-                class="flex items-center justify-center h-24 w-24 rounded-md bg-gray-100 text-white"
-              >
-                <img src="/img/cert/ckad.png" />
-              </div>
-            </div>
-            <div class="ml-4">
-              <dt class="text-lg leading-6 font-medium text-gray-900">
-                CKAD - Certified Kubernetes Application Developer
-              </dt>
-              <dd class="mt-2 text-base text-gray-500">
-                Be able to define application resources and use core primitives
-                to build, monitor, and troubleshoot scalable applications and
-                tools in Kubernetes.
-              </dd>
-            </div>
-          </div>
-        </dl>
-      </div>
+        ))
+      }
     </div>
-
-  </div>
+  </section>
 </Layout>
