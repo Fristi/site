@@ -109,6 +109,20 @@ const certs = [
     <div aria-hidden class="pointer-events-none absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-primary opacity-[0.05] blur-[80px]" />
     <div aria-hidden class="pointer-events-none absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-secondary opacity-[0.05] blur-[80px]" />
 
+    <!-- Sketch portrait — blends into background via multiply -->
+    <div aria-hidden class="pointer-events-none absolute right-0 top-0 bottom-0 w-[45%] hidden lg:block">
+      <!-- Fade mask: right side fades in, left edge fades out -->
+      <div class="absolute inset-0 z-10"
+        style="mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%);">
+        <img
+          src="/img/mark_sketch.jpg"
+          alt=""
+          class="h-full w-full object-cover object-top"
+          style="mix-blend-mode: multiply; opacity: 0.55;"
+        />
+      </div>
+    </div>
+
     <div class="relative max-w-2xl">
       <!-- Display heading -->
       <h1 class="font-display font-extrabold text-[3.5rem] leading-[1.1] tracking-[-0.02em] text-on-surface">
