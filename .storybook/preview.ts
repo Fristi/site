@@ -6,9 +6,9 @@ const preview: Preview = {
     backgrounds: {
       default: "void",
       values: [
-        { name: "void", value: "#0c0e12" },
-        { name: "surface-low", value: "#111318" },
-        { name: "light", value: "#ffffff" },
+        { name: "void", value: "#ffffff" },
+        { name: "surface-low", value: "#f1f5f9" },
+        { name: "dark", value: "#0c0e12" },
       ],
     },
     controls: {

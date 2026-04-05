@@ -22,25 +22,25 @@ export default {
     },
     extend: {
       colors: {
-        // Design system surface tiers
-        "void": "#0c0e12",
-        "surface-lowest": "#0e1014",
-        "surface-low": "#111318",
-        "surface": "#161a20",
-        "surface-high": "#1d2025",
-        "surface-highest": "#232830",
-        // Accent colors
-        "primary": "#99f7ff",
-        "primary-container": "#00f1fe",
-        "secondary": "#a68cff",
-        "secondary-container": "#2d2060",
+        // Design system surface tiers (light)
+        "void": "#ffffff",
+        "surface-lowest": "#f8fafc",
+        "surface-low": "#f1f5f9",
+        "surface": "#e8edf2",
+        "surface-high": "#dde3ea",
+        "surface-highest": "#cdd5df",
+        // Accent colors (deepened for light-mode contrast)
+        "primary": "#0891b2",
+        "primary-container": "#0e7490",
+        "secondary": "#7c3aed",
+        "secondary-container": "#ede9fe",
         // Text colors
-        "on-surface": "#e2e3e8",
-        "on-surface-variant": "#aaabb0",
-        "on-primary": "#0c0e12",
+        "on-surface": "#0f172a",
+        "on-surface-variant": "#475569",
+        "on-primary": "#ffffff",
         "on-secondary": "#ffffff",
-        "on-secondary-container": "#d0c0ff",
-        "outline-variant": "#44464f",
+        "on-secondary-container": "#4c1d95",
+        "outline-variant": "#94a3b8",
       },
       animation: {
         "meteor-effect": "meteor 5s linear infinite",
