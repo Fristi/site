@@ -102,17 +102,81 @@ const certs = [
 ---
 
 <Layout>
-  <!-- Hero / About -->
-  <section class="lg:grid lg:grid-cols-2 lg:gap-16 items-start">
-    <div>
-      <h1 class="font-display text-[2.75rem] font-extrabold leading-[1.1] tracking-[-0.02em] text-on-surface">
-        About
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden -mx-4 md:-mx-8 px-4 md:px-8 py-20 md:py-32">
+    <!-- Background blobs (mirrors BlobBackground component) -->
+    <div aria-hidden class="pointer-events-none absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-primary opacity-[0.05] blur-[80px]" />
+    <div aria-hidden class="pointer-events-none absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-secondary opacity-[0.05] blur-[80px]" />
+
+    <div class="relative max-w-2xl">
+      <!-- Display heading -->
+      <h1 class="font-display font-extrabold text-[3.5rem] leading-[1.1] tracking-[-0.02em] text-on-surface">
+        Crafting systems<br />that scale
       </h1>
+
+      <!-- Body text -->
+      <p class="mt-6 font-body text-base leading-relaxed text-on-surface-variant max-w-xl">
+        I help engineering teams design and build high-throughput backends, data
+        pipelines, and functional systems — with Scala, Rust, and Kafka at the core.
+        13+ years of experience across energy, finance, logistics, and telecom.
+      </p>
+
+      <!-- CTAs (primary button + glass button as anchor tags) -->
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href="/project"
+          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 bg-primary text-on-primary shadow-[0_0_20px_2px_rgba(153,247,255,0.25)] hover:shadow-[0_0_32px_4px_rgba(153,247,255,0.35)] hover:brightness-105"
+        >
+          View work
+        </a>
+        <a
+          href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 bg-surface-high/50 backdrop-blur-[16px] text-on-surface border border-outline-variant/20 hover:bg-surface-highest/60 hover:backdrop-blur-[20px]"
+        >
+          Get in touch
+        </a>
+      </div>
+
+      <!-- Social links -->
+      <div class="mt-10 flex gap-4">
+        <a
+          target="_blank"
+          href="https://github.com/Fristi"
+          class="text-on-surface-variant hover:text-primary transition-colors"
+          aria-label="GitHub"
+        >
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
+          class="text-on-surface-variant hover:text-primary transition-colors"
+          aria-label="LinkedIn"
+        >
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="mt-8 lg:grid lg:grid-cols-2 lg:gap-16 items-start">
+    <div>
+      <h2 class="font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface">
+        About
+      </h2>
 
       <div class="mt-6 space-y-4 text-base leading-7 text-on-surface-variant">
         <p>
-          <strong class="font-semibold text-on-surface">Mark de Jong</strong> is an experienced software engineer, which writes robust and scalable software, designs user-friendly
-          interfaces, very critical, mentors others, and reviews code with care.
+          <strong class="font-semibold text-on-surface">Mark de Jong</strong> is an experienced software engineer who writes robust and scalable software, designs user-friendly
+          interfaces, mentors others, and reviews code with care.
         </p>
         <p>
           With over 13 years of professional experience, I've delivered
@@ -123,46 +187,18 @@ const certs = [
           combines functional programming principles with real-world impact.
         </p>
         <p>
-          I've contributed to open-source Scala projects mostly like Cats, Tapir, and
+          I've contributed to open-source Scala projects like Cats, Tapir, and
           Doobie, and introduced novel ideas such as the Saga Monad (now
           adopted in Arrow and ZIO). I'm driven by curiosity, and I enjoy
           solving hard problems—whether it's optimizing protocols, designing
           internal DSLs, or writing firmware in Rust for embedded devices.
         </p>
-        <p>In my professional career I have worked at various companies doing diverse projects.</p>
         <ul class="space-y-1 list-disc list-inside text-on-surface-variant">
-          <li>Development of custom content management systems</li>
-          <li>Development and moderation of community websites</li>
-          <li>Improving performance of existing software</li>
-          <li>High performance backends</li>
-          <li>Financial systems</li>
-          <li>Marketing pages</li>
+          <li>Custom content management systems</li>
+          <li>High performance backends &amp; financial systems</li>
           <li>Single page web apps and mobile apps</li>
+          <li>Marketing pages &amp; community platforms</li>
         </ul>
-        <p>Next to all of this in my personal life I like to sport, travel and learn about new things</p>
-      </div>
-
-      <div class="mt-8 flex gap-4">
-        <a
-          target="_blank"
-          href="https://github.com/Fristi"
-          class="text-on-surface-variant hover:text-primary transition-colors"
-          aria-label="GitHub"
-        >
-          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
-          </svg>
-        </a>
-        <a
-          target="_blank"
-          href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
-          class="text-on-surface-variant hover:text-primary transition-colors"
-          aria-label="LinkedIn"
-        >
-          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-          </svg>
-        </a>
       </div>
     </div>
 
