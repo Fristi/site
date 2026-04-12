@@ -17,13 +17,31 @@ You could use `recover` to execute a _compensating_ action (an action that rever
 
 To describe a program that can handle failure you need to couple the outcome of a successful action to its compensating action.
 
-## A short example of a `Saga` program
+## A real-world example: booking a trip
+
+Going back to our travel booking scenario, here is how you would express it using `volatile-saga`:
+
+```scala
+import cats.effect.IO
+import volatilesaga._
+
+def bookTrip(flight: FlightReq, hotel: HotelReq, car: CarReq): Saga[IO, Booking] =
+  for {
+    f <- Saga.recoverable(flightApi.book(flight))(ref => flightApi.cancel(ref.id))
+    h <- Saga.recoverable(hotelApi.book(hotel))(ref => hotelApi.cancel(ref.id))
+    c <- Saga.recoverable(carApi.book(car))(ref => carApi.cancel(ref.id))
+  } yield Booking(f, h, c)
+```
+
+If `carApi.book` fails, the saga automatically cancels the hotel and flight reservations in reverse order — no manual try/catch nesting required.
+
+## A rollback example
 
 ```scala
 import cats.effect.IO
 import cats.implicits._
-import cats.effect.concurrent.Ref
-import goedverhaal._
+import cats.effect.Ref
+import volatilesaga._
 import scala.util.control.NonFatal
 
 def prg(ref: Ref[IO, Int]): Saga[IO, Unit] = for {
@@ -81,12 +99,28 @@ You can also use the `run` variant on `Saga` which uses the `decide`
 def run: F[A] = decide { case (a, _) => F.pure(a) }
 ```
 
+# Limitations
+
+`volatile-saga` is deliberately in-process and non-persistent. That means:
+
+- **No crash recovery** — if the JVM dies mid-saga, in-flight compensations are lost.
+- **No retry logic** — if a compensating action itself fails (e.g. the flight API is down), it is not retried.
+- **No idempotency keys** — the library does not manage duplicate-prevention for you.
+
+For the failure path, the recommended approach is to combine `volatile-saga` with the **outbox pattern**: if a compensation fails, write it to an outbox table in your local database, then have a background worker retry failed compensations with exponential backoff. This gives you eventual consistency without requiring a full persistent saga infrastructure.
+
+For scenarios requiring crash recovery, exactly-once semantics, or long-running workflows, consider alternatives:
+
+- **Two-Phase Commit** — strong consistency, but couples services tightly and is fragile under partial failures.
+- **Persistent sagas** — store saga state in a database so it survives crashes; more infrastructure overhead.
+- **[Temporal](https://temporal.io)** — a full durable execution platform; the right choice for long-running or complex workflows.
+
 # Conclusion
 
-As you can see `Saga` is a useful tool when interacting with multiple APIs which are crossing an asynchronous boundary and might not offer transactional guarantees. It might not be the best solution, but in a lot of cases you don't have a better choice, I guess (welcome to the microservice/API era)!
+`Saga` is a useful tool when interacting with multiple APIs that cross an asynchronous boundary and do not offer transactional guarantees. For short-lived request/response flows — an HTTP handler, a CLI command, a batch job step — `volatile-saga` gives you structured rollback with minimal infrastructure overhead.
 
-If you want to have a closer look at how that's done or have feedback. Have a look at the source code on [Github](https://github.com/Fristi/goedverhaal).
+If you want to have a closer look or have feedback, the source code is on [Github](https://github.com/Fristi/volatile-saga).
 
-Actually someone developed a ZIO version of this: [zio-saga](https://github.com/VladKopanev/zio-saga)
+There is also a ZIO version of this pattern: [zio-saga](https://github.com/VladKopanev/zio-saga)
 
 Happy hacking!
