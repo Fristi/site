@@ -7,19 +7,57 @@ description: "Getting rid of mocks in your service layer tests and test your dat
 
 ## Motivation
 
-A common architectural style is the 3-layer model (data, service, and API/view layer) for writing web services. With this style, the data layer is tested with unit tests, H2 database or not. The service layer is tested with mocks, where the calls to the database are emulated.
+A common architectural style is the 3-layer model (data, service, and API/view layer) for writing web services. With this style, the data layer is tested with unit tests — often against an H2 in-memory database — and the service layer is tested with mocks, where calls to the database are emulated.
 
-The approach with the data layer has some downsides. Inserting, updating, and reading things can be seen as encoding/decoding data from a medium. As you might like encoding and decoding JSON, decoding might go wrong. When working with databases, schema changes might cause decode errors when you do not update your domain model. Or when you introduce a new enum member it might that the database cannot store this yet. To assert that we have symmetric encoding and decoding effects, we can use property-based tests. Also if you use Postgres and H2 for testing, there might be discrepancies like H2 doesn't have PostGIS or other unsupported features.
+Both approaches have problems.
 
-The approach with the service layer has some downsides, What if the behavior of the repository method changes over time or the emulated repository method is invalid? You'll test with the wrong assumptions and you might introduce bugs.
+**Data layer tests** treat inserting and reading as encoding/decoding data. Schema changes, new enum members, or Postgres-specific features (like PostGIS) can all cause failures that H2 won’t catch. And when you write property-based tests directly against the repository, you end up re-implementing its logic in your assertions:
+
+```scala
+prop { (persons: List[Person], age: Int) =>
+  repo.insertMany(persons)
+  repo.deleteWhenOlderThan(age)
+  val remaining = repo.listAll()
+
+  // Re-implementing the repository’s filter logic right here in the test
+  remaining must_== persons.filter(_.age <= age)
+}
+```
+
+This is fragile. If your assertion has an off-by-one error or uses the wrong comparison operator, the test is worthless — and you won’t know it. You’ve encoded your expectations twice, and you’re hoping they match.
+
+**Service layer tests** have a different problem: what if the behavior of the mocked repository method changes over time, or the mock is simply wrong? You’ll test with incorrect assumptions and introduce bugs.
 
 ## A solution
 
-To tackle both pitfalls we can use oracles and model-based testing which are according to [F# for fun and profit](https://fsharpforfunandprofit.com/posts/property-based-testing-2/#model-based-testing):
+### The solution: make the expectations an executable model
 
-> The way it works is that, in parallel with your (complex) system under test, you create a simplified model. Then, when you do something to the system under test, you do the same (but simplified) thing to your model. In the end, you compare your model’s state with the state of the system under test. If they are the same, you’re done.
+Instead of scattering filtering logic across assertions, move it into a proper in-memory implementation of the same algebra. This model is trivially simple — just list operations on a case class — so it’s easy to get right. Then run the same operations against both the real implementation and the model, and compare results.
 
-In our case, we use a mirror implementation of the interface. When working with the data layer, we have a real database implementation and an in-memory implementation. The in-memory implementation can be used as an _oracle_. The oracle can also be used in _both_ testing the data and service layer. In the data layer tests, the oracle is used to verify that the in-memory variant mirrors the behavior of the database and in the service layer tests we use the oracle to mock the database.
+This is the **test oracle pattern**: you don’t assert _what_ the result should be, you assert that two implementations _agree_.
+
+```
+  Generate random data
+            │
+    ┌───────┴───────┐
+    ▼               ▼
+ ┌──────┐     ┌──────────┐
+ │ Real │     │ In-memory│
+ │ impl │     │  model   │
+ │ (DB) │     │ (Mirra)  │
+ └──┬───┘     └────┬─────┘
+    │              │
+    ▼              ▼
+  result₁ ═══ result₂ ?
+```
+
+If they diverge, either the real implementation has a bug, or the model is wrong — both of which are valuable to discover.
+
+### Why this also helps your service tests
+
+Once you’ve proven the in-memory model is faithful to the real implementation, you can use that model as a drop-in replacement in your service-layer unit tests. No database, no containers, no network — just fast, deterministic tests that you know are behaviorally accurate, because the model has been validated against the real thing.
+
+This is much better than mocks: a mock returns whatever you tell it to, even outputs the real implementation would never produce for a given input. A validated in-memory model can’t lie that way.
 
 In this case, we work with a functional scala tech stack: Doobie and ZIO. We use ZIO mainly in the upper layers like the service layer and API layer to handle side effects.
 
@@ -104,28 +142,28 @@ To write universal combinators we need setters to mutate the `Universe` structur
 Now with all the ingredients we can start writing our first combinators:
 
 ```scala
-final case class Septic[D, A] private (db: State[D, A]) {
+final case class Mirra[D, A] private (db: State[D, A]) {
   def run(state: D): A = db.runA(state).value
 }
 
-object Septic {
-  def all[D, A](at: Lens[D, List[A]]): Septic[D, List[A]] =
-    Septic(State.get.map(at.get))
+object Mirra {
+  def all[D, A](at: Lens[D, List[A]]): Mirra[D, List[A]] =
+    Mirra(State.get.map(at.get))
 
-  def insertMany[D, A](at: Lens[D, List[A]])(elements: List[A]): Septic[D, Long] =
+  def insertMany[D, A](at: Lens[D, List[A]])(elements: List[A]): Mirra[D, Long] =
     insertMany_(at)(elements).size
 
-  def insertMany_[D, A](at: Lens[D, List[A]])(elements: List[A]): Septic[D, List[A]] =
-    Septic(State.modify[D](s => at.modify(_ ++ elements)(s)) *> State.pure(elements))
+  def insertMany_[D, A](at: Lens[D, List[A]])(elements: List[A]): Mirra[D, List[A]] =
+    Mirra(State.modify[D](s => at.modify(_ ++ elements)(s)) *> State.pure(elements))
 
-  def insert[D, A](at: Lens[D, List[A]])(element: A): Septic[D, Long] =
+  def insert[D, A](at: Lens[D, List[A]])(element: A): Mirra[D, Long] =
     insertMany(at)(List(element))
 
-  def delete[D, A](at: Lens[D, List[A]])(filter: A => Boolean): Septic[D, Long] =
+  def delete[D, A](at: Lens[D, List[A]])(filter: A => Boolean): Mirra[D, Long] =
     delete_(at)(filter).size
 
-  def delete_[D, A](at: Lens[D, List[A]])(filter: A => Boolean): Septic[D, List[A]] =
-    Septic {
+  def delete_[D, A](at: Lens[D, List[A]])(filter: A => Boolean): Mirra[D, List[A]] =
+    Mirra {
       for {
         elements <- State.get[D]
         (toDelete, toKeep) = at.get(elements).partition(filter)
@@ -135,9 +173,9 @@ object Septic {
 }
 ```
 
-The first thing to note is that we create a new type (in Scala 3 we could use opaque types) called `Septic` wrapping a `State` monad which has constrained combinators. The nice thing about these general combinators is:
+The first thing to note is that we create a new type (in Scala 3 we could use opaque types) called `Mirra` wrapping a `State` monad which has constrained combinators. The nice thing about these general combinators is:
 
-- They infer the `Septic` type when you supply it the `Lens[D, List[A]]`
+- They infer the `Mirra` type when you supply it the `Lens[D, List[A]]`
 - When used with an atomic reference, you could even use the implementation to a bootup server and use it locally for testing for example
 
 With these combinators, we can code our `PersonRepository`:
@@ -152,15 +190,15 @@ object Universe {
   def zero: Universe = Universe(Nil)
 }
 
-object SepticPersonRepository extends PersonRepository[Septic[Universe, *]] {
-  def insertMany(persons: List[Person]): Septic[Universe, Long] =
-    Septic.insertMany(Universe.persons)(persons)
+object MirraPersonRepository extends PersonRepository[Mirra[Universe, *]] {
+  def insertMany(persons: List[Person]): Mirra[Universe, Long] =
+    Mirra.insertMany(Universe.persons)(persons)
 
-  def deleteWhenOlderThen(age: Long): Septic[Universe, Long] =
-    Septic.delete(Universe.persons)(_.age > age)
+  def deleteWhenOlderThen(age: Long): Mirra[Universe, Long] =
+    Mirra.delete(Universe.persons)(_.age > age)
 
-  def listAll(): Septic[Universe, List[Person]] =
-    Septic.all(Universe.persons)
+  def listAll(): Mirra[Universe, List[Person]] =
+    Mirra.all(Universe.persons)
 }
 ```
 
@@ -168,13 +206,13 @@ object SepticPersonRepository extends PersonRepository[Septic[Universe, *]] {
 
 As stated before, if we want to assert that our data layer is right we need to run for example a database program (like an insert and read) in parallel. This is where `SemigroupalK` comes into play.
 
-In my proof of concept library I've created a `Harnass`:
+In my proof of concept library I've created a `Harness`:
 
 ```scala
-class Harnass[Alg[_[_]], F[_], Tx[_], D](initState: D, db: Alg[Tx], model: Alg[Septic[D, *]], tx: Tx ~> F) {
+class Harness[Alg[_[_]], F[_], Tx[_], D](initState: D, db: Alg[Tx], model: Alg[Mirra[D, *]], tx: Tx ~> F) {
 
-  // create a effect type which is higher kinded tuple which has the doobie version and Septic version
-  type Eff[A] = Tuple2K[Tx, Septic[D, *], A]
+  // create a effect type which is higher kinded tuple which has the doobie version and Mirra version
+  type Eff[A] = Tuple2K[Tx, Mirra[D, *], A]
   // set the effect type of the repository interface
   type Paired = Alg[Eff]
 
@@ -191,7 +229,7 @@ class Harnass[Alg[_[_]], F[_], Tx[_], D](initState: D, db: Alg[Tx], model: Alg[S
         val effectTuple: Eff[A] = f(paired)
         //we run the connection against a rollback transactor, and get the result
         val dbValue: F[A] = tx(effectTuple.first)
-        //we run the state monad and get the value
+        //we run the Mirra state monad and get the value
         val stateValue: A = effectTuple.second.run(initState)
 
         dbValue.map(_ -> stateValue)
@@ -206,21 +244,21 @@ Don't be daunted by the generic parameters. I'll go quickly over them:
 - `Alg` is the repository type `PersonRepository` in our case
 - `F` is the effect type like `cats.effect.IO`
 - `Tx` is the transaction type, this is `ConnectionIO` from Doobie
-- `D` is the state type used for `Septic`, in our case, this is `Universe`
+- `D` is the state type used for `Mirra`, in our case, this is `Universe`
 
-Like stated before, it creates out of `SemigroupalK[Alg]` a higher-kinded paired version. So we combine two interpreters of `PersonRepository`, like: `PersonRepository[ConnnectionIO]` and `PersonRepository[Septic[Universe, *]]` into a `PersonRepository[Tuple2K[ConnectionIO, Septic[Universe, *], *]]`.
+Like stated before, it creates out of `SemigroupalK[Alg]` a higher-kinded paired version. So we combine two interpreters of `PersonRepository`, like: `PersonRepository[ConnnectionIO]` and `PersonRepository[Mirra[Universe, *]]` into a `PersonRepository[Tuple2K[ConnectionIO, Mirra[Universe, *], *]]`.
 
 A few tests in my proof of concept look like this:
 
 ```scala
-  def harnass: Harnass[PersonRepository, IO, ConnectionIO, Universe] =
-    new Harnass(Universe.zero, DoobiePersonRepository, SepticPersonRepository, xa.trans)
+  def harness: Harness[PersonRepository, IO, ConnectionIO, Universe] =
+    new Harness(Universe.zero, DoobiePersonRepository, MirraPersonRepository, xa.trans)
 
   "PersonRepository" should {
     "should insert and read" in {
       prop { persons: List[Person] =>
         assertMirroring {
-          harnass.model.eval { x =>
+          harness.model.eval { x =>
               x.insertMany(persons) *>
               x.listAll()
           }
@@ -231,7 +269,7 @@ A few tests in my proof of concept look like this:
     "should delete people older then" in {
       prop { (persons: List[Person], age: Int) =>
         assertMirroring {
-          harnass.model.eval { x =>
+          harness.model.eval { x =>
               x.insertMany(persons) *>
               x.deleteWhenOlderThen(age) *>
               x.listAll()
@@ -242,7 +280,7 @@ A few tests in my proof of concept look like this:
   }
 ```
 
-In this case, we use specs2 with scalacheck to do property-based testing. We ask scalacheck to generate arbitrary lists of `Person` instances and run our database program by using `harnass.model.eval`. This is wrapped by `assertMirroring` is a little helper method that asserts that the values in the returned tuple are equal.
+In this case, we use specs2 with scalacheck to do property-based testing. We ask scalacheck to generate arbitrary lists of `Person` instances and run our database program by using `harness.model.eval`. This is wrapped by `assertMirroring` is a little helper method that asserts that the values in the returned tuple are equal.
 
 The `*>` can be read as followed. Alternatively you could also write a for comprehension if that is easier for you. Another nice thing to note is that we can configure the `Transactor[IO]` to be a rollback transactor by setting `always` on the strategy to `connection.rollback *> connection.close`
 
@@ -302,7 +340,7 @@ object Pg {
 
 The query accessor method has access to `PostgresRepos` which is a trait that is a collection of all the repositories.
 
-Now comes the trick. When you use it in production, you'll use the `DoobieXXX` version and when you _unit test_ your service methods, you use the `SepticXXX` versions which are asserted to be equal to the `DoobieXXX` versions.
+Now comes the trick. When you use it in production, you'll use the `DoobieXXX` version and when you _unit test_ your service methods, you use the `MirraXXX` versions which are asserted to be equal to the `DoobieXXX` versions.
 
 ## Conclusion
 
@@ -314,4 +352,4 @@ By using the oracle we solve a few problems
 - We assert encoding/decoding symmetry from our domain model. You might miss out on decoding existing entries in the database though.
 - In the service layer tests, we don't use mocks, but in-memory variants which mirror the behavior of the real implementation asserted in the data layer tests
 
-I've actually coded the `Septic` thing into a repository and you can find it up [here](https://github.com/Fristi/septic/). It's a proof of concept, but I've used this methodology at DHL Netherlands. It needs some work on testing all the combinators at `Septic`. If someone wants to continue the work release this to Maven Central go ahead. It would be great to mention my work if you do.
+I've actually coded the `Mirra` library and you can find it [here](https://github.com/Fristi/mirra). It's a proof of concept, but I've used this methodology at DHL Netherlands. Note that the project is not actively maintained, but it remains a useful reference or starting point for anyone who wants to adopt this pattern.
