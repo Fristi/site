@@ -1,34 +1,12 @@
 ---
-import StackIcon from "tech-stack-icons";
+import TechItem from "./TechItem.astro";
 type Props = {
   tech: string[];
 };
 
 const { tech } = Astro.props;
-const not_supported = ["akka", "typelevel", "kafka", "zio", "keycloak"];
 ---
 
 <>
-  {
-    tech.map((t) => (
-      <span class="p-3 flex flex-col items-center">
-        {not_supported.includes(t) ? (
-          <img
-            src={`/img/tech/${t}.svg`}
-            alt={t}
-            class="w-12 h-12 rounded filter grayscale"
-          />
-        ) : (
-          <StackIcon
-            variant="grayscale"
-            className="w-12 h-12 rounded"
-            name={t}
-          />
-        )}
-        <span class="mt-1 text-xs font-bold uppercase tracking-tight text-gray-700">
-          {t}
-        </span>
-      </span>
-    ))
-  }
+  {tech.map((t: string) => <TechItem tech={t} />)}
 </>

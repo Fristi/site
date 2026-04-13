@@ -19,11 +19,9 @@ const { tech } = Astro.props;
           Technologies and tools we've used
         </p>
       </div>
-      <marquee>
-        <div class="flex items-center whitespace-nowrap">
-          <TechItems tech={tech} />
-        </div>
-      </marquee>
+      <div class="flex flex-wrap items-center justify-center">
+        <TechItems tech={tech} />
+      </div>
     </div>
   )
 }

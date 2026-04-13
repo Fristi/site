@@ -1,0 +1,30 @@
+---
+import StackIcon from "tech-stack-icons";
+type Props = {
+  tech: string;
+};
+
+const { tech } = Astro.props;
+const not_supported = ["akka", "typelevel", "kafka", "zio", "keycloak"];
+---
+
+<span class="p-3 flex flex-col items-center">
+  {
+    not_supported.includes(tech) ? (
+      <img
+        src={`/img/tech/${tech}.svg`}
+        alt={tech}
+        class="w-12 h-12 rounded filter grayscale"
+      />
+    ) : (
+      <StackIcon
+        variant="grayscale"
+        className="w-12 h-12 rounded"
+        name={tech}
+      />
+    )
+  }
+  <span class="mt-1 text-xs font-bold uppercase tracking-tight text-gray-700">
+    {tech}
+  </span>
+</span>
