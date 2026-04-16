@@ -1,4 +1,6 @@
 import { visit } from "unist-util-visit";
+import { unified } from "unified";
+import rehypeParse from "rehype-parse";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import StackIcon from "tech-stack-icons";
@@ -60,6 +62,14 @@ function getBadgeHtml(lang) {
   }<span class="code-lang-label">${label}</span></div>`;
 }
 
+/** Parse an HTML string fragment into HAST element nodes. */
+function htmlToHastNodes(html) {
+  const tree = unified().use(rehypeParse, { fragment: true }).parse(html);
+  // Strip position data to keep the tree clean
+  visit(tree, (node) => { delete node.position; });
+  return tree.children;
+}
+
 // Remark plugin — runs BEFORE remarkShiki, collects languages from code nodes
 // in document order so rehypeCodeBlocks can match them positionally.
 export function remarkCollectCodeLangs() {
@@ -72,20 +82,46 @@ export function remarkCollectCodeLangs() {
 }
 
 // Rehype plugin — wraps each Shiki-generated pre with a badge + outer div.
-// Astro 2.x Shiki doesn't embed the language in the HTML, so we read from
-// the list collected by remarkCollectCodeLangs above.
+//
+// .md files:  Shiki output stays as "raw" HAST nodes (no rehypeRaw in pipeline)
+//             → wrap the HTML string directly.
+//
+// .mdx files: @astrojs/mdx inserts rehypeRaw BEFORE user plugins, converting
+//             "raw" nodes to "element" nodes. hast-util-to-estree (used later
+//             by MDX) cannot handle raw nodes, so we build proper HAST elements.
 export function rehypeCodeBlocks() {
   return function (tree, file) {
     const langs = file.data.codeLangs || [];
     let codeIndex = 0;
 
+    // .md path — raw HTML string nodes
     visit(tree, "raw", (node) => {
       if (!node.value.includes("astro-code")) return;
-
       const lang = langs[codeIndex++] || null;
       const badge = getBadgeHtml(lang);
-
       node.value = `<div class="code-wrapper">${badge}${node.value}</div>`;
+    });
+
+    // .mdx path — pre elements already parsed into HAST by rehypeRaw
+    const seen = new WeakSet();
+    visit(tree, "element", (node, index, parent) => {
+      if (seen.has(node)) return;
+      if (
+        node.tagName !== "pre" ||
+        !node.properties?.className?.includes("astro-code")
+      ) return;
+
+      seen.add(node);
+      const lang = langs[codeIndex++] || null;
+      const badgeNodes = htmlToHastNodes(getBadgeHtml(lang));
+
+      const wrapper = {
+        type: "element",
+        tagName: "div",
+        properties: { className: ["code-wrapper"] },
+        children: [...badgeNodes, node],
+      };
+      parent.children.splice(index, 1, wrapper);
     });
   };
 }
