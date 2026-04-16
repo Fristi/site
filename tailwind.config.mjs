@@ -42,8 +42,8 @@ export default {
         "surface-high": "#dde3ea",
         "surface-highest": "#cdd5df",
         // Accent colors (deepened for light-mode contrast)
-        primary: "#0891b2",
-        "primary-container": "#0e7490",
+        primary: "#4f46e5",
+        "primary-container": "#4338ca",
         secondary: "#7c3aed",
         "secondary-container": "#ede9fe",
         // Text colors
