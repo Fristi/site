@@ -1,7 +1,8 @@
 import defaultTheme from "tailwindcss/defaultTheme.js";
 import typography from "@tailwindcss/typography";
 import _flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette.js";
-const flattenColorPalette = _flattenColorPalette.default ?? _flattenColorPalette;
+const flattenColorPalette =
+  _flattenColorPalette.default ?? _flattenColorPalette;
 
 /** @param {{ addBase: Function, theme: Function }} helpers */
 function addVariablesForColors({ addBase, theme }) {
@@ -28,22 +29,22 @@ export default {
         '"HelveticaNeue-CondensedBold"',
         ...defaultTheme.fontFamily.sans,
       ],
-      display: ["Manrope", ...defaultTheme.fontFamily.sans],
-      body: ["Inter", ...defaultTheme.fontFamily.sans],
+      display: ["PT Serif", ...defaultTheme.fontFamily.sans],
+      body: ["PT Serif", ...defaultTheme.fontFamily.sans],
     },
     extend: {
       colors: {
         // Design system surface tiers (light)
-        "void": "#ffffff",
+        void: "#ffffff",
         "surface-lowest": "#f8fafc",
         "surface-low": "#f1f5f9",
-        "surface": "#e8edf2",
+        surface: "#e8edf2",
         "surface-high": "#dde3ea",
         "surface-highest": "#cdd5df",
         // Accent colors (deepened for light-mode contrast)
-        "primary": "#4f46e5",
-        "primary-container": "#4338ca",
-        "secondary": "#7c3aed",
+        primary: "#0891b2",
+        "primary-container": "#0e7490",
+        secondary: "#7c3aed",
         "secondary-container": "#ede9fe",
         // Text colors
         "on-surface": "#0f172a",
