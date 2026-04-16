@@ -17,7 +17,7 @@ const { title, description, pubDate, banner, series, slug } = Astro.props;
 <html lang="en">
   <BaseHead description={description} title={title} image={banner} />
   <Shell>
-    <div class="relative bg-gray-50 overflow-hidden">
+    <div class="relative overflow-hidden">
       <div class="mt-8 mb-8 relative px-4 sm:px-6 lg:px-8">
         <div class="text-lg max-w-4xl mx-auto">
           <h1>
@@ -38,9 +38,7 @@ const { title, description, pubDate, banner, series, slug } = Astro.props;
           >
             <slot />
           </div>
-          {series && (
-            <BlogSeries currentSlug={slug} series={series} />
-          )}
+          {series && <BlogSeries currentSlug={slug} series={series} />}
           <div class="max-w-7xl mx-auto mt-8 px-4 text-center sm:px-6 lg:px-8">
             <div class="space-y-4">
               <div
