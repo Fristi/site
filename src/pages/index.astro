@@ -1,6 +1,7 @@
 ---
 import Client from "../components/Client.astro";
 import Layout from "../components/Layout.astro";
+import TechItem from "../components/TechItem.astro";
 
 const talks = [
   {
@@ -80,6 +81,140 @@ const openSourceProjects = [
     description:
       "A eDSL (embedded domain specific language) in Scala to map data structures to Avro encoders, decoders and schemas",
     url: "https://github.com/Fristi/formulation",
+  },
+];
+
+const technologies = [
+  // Languages
+  {
+    icon: "scala",
+    name: "Scala",
+    mastery: 90,
+    description: "tapir, caliban, sttp, akka/pekko",
+  },
+  {
+    icon: "typelevel",
+    name: "Typelevel",
+    mastery: 85,
+    description: "fs2, http4s, doobie, cats-effect, cats, fs2-kafka",
+  },
+  {
+    icon: "zio",
+    name: "ZIO",
+    mastery: 85,
+    description: "zio-kafka, zio-config, zio-schema, zio-http, zio-json",
+  },
+  {
+    icon: "docker",
+    name: "Docker",
+    mastery: 80,
+  },
+  {
+    icon: "github",
+    name: "GitHub Actions",
+    mastery: 80,
+    description: "GitLab CI",
+  },
+  {
+    icon: "kafka",
+    name: "Kafka",
+    mastery: 80,
+  },
+  {
+    icon: "swagger",
+    name: "Protocols & data formats",
+    mastery: 80,
+    description:
+      "OpenAPI, Avro, Protobuf, AsyncAPI, REST, gRPC, GraphQL, OpenAPI",
+  },
+  {
+    icon: "rust",
+    name: "Rust",
+    mastery: 75,
+    description: "tokio, axum, sqlx, reqwest, serde, clap, embassy",
+  },
+  {
+    icon: "astro",
+    name: "React",
+    mastery: 70,
+    description: "Next.js, Astro",
+  },
+  {
+    icon: "kubernetes",
+    name: "Kubernetes",
+    mastery: 70,
+    description: "HELM, ArgoCD",
+  },
+  {
+    icon: "postgresql",
+    name: "PostgreSQL",
+    mastery: 70,
+  },
+  {
+    icon: "typescript",
+    name: "TypeScript / JavaScript",
+    mastery: 70,
+    description: "Frontend and scripting in general",
+  },
+  {
+    icon: "opentelemetry",
+    name: "Monitoring, tracing & profiling",
+    mastery: 65,
+    description: "OpenTelemetry, OpenTracing, flamegraphs and benchmarking",
+  },
+
+  {
+    icon: "mysql",
+    name: "MySQL",
+    mastery: 65,
+  },
+  {
+    icon: "mongodb",
+    name: "MongoDB",
+    mastery: 65,
+  },
+  {
+    icon: "java",
+    name: "Java",
+    mastery: 60,
+    description: "Spring, Hibernate, Jackson",
+  },
+  {
+    icon: "redis",
+    name: "Redis",
+    mastery: 60,
+  },
+  {
+    icon: "kotlin",
+    name: "Kotlin",
+    mastery: 60,
+    description: "coroutines, flows, http4k",
+  },
+
+  {
+    icon: "elastic",
+    name: "Elastic stack",
+    mastery: 50,
+    description: "Elasticsearch and Kibana",
+  },
+  {
+    icon: "csharp",
+    name: "C#",
+    mastery: 50,
+    description: "ASP.NET MVC, Entity framework",
+  },
+  {
+    icon: "fsharp",
+    name: "F#",
+    mastery: 50,
+    description:
+      "algebraic data types, pattern matching, type providers and asynchronous programming",
+  },
+  {
+    icon: "haskell",
+    name: "Haskell",
+    mastery: 50,
+    description: "aeson, scotty",
   },
 ];
 
@@ -384,6 +519,57 @@ const certs = [
         name="Malmberg"
         description="Malmberg is a Dutch company which creates educational software and books for schools. I've worked on Malmberg on a content management system (CMS) for educational software."
       />
+    </div>
+  </section>
+
+  <!-- Technologies -->
+  <section class="mt-24">
+    <div class="mb-10">
+      <h2
+        class="font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface"
+      >
+        Technologies
+      </h2>
+      <p class="mt-2 text-base text-on-surface-variant">
+        Languages, tools and platforms I've worked with over the years
+      </p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        technologies.map((t) => (
+          <div class="relative flex items-start gap-4 rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-5 transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
+            <div
+              class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+              aria-hidden
+            />
+            <div class="relative flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-surface-highest">
+              <TechItem tech={t.icon} showLabel={false} iconClass="w-7 h-7" />
+            </div>
+            <div class="relative flex-1 min-w-0">
+              <p class="font-display font-bold text-sm text-on-surface">
+                {t.name}
+              </p>
+              <div class="mt-2 flex items-center gap-2">
+                <div class="flex-1 h-1.5 rounded-full bg-surface-highest overflow-hidden">
+                  <div
+                    class="h-full rounded-full bg-primary"
+                    style={`width: ${t.mastery}%`}
+                  />
+                </div>
+                <span class="text-xs font-mono text-on-surface-variant/60 flex-shrink-0">
+                  {t.mastery}%
+                </span>
+              </div>
+              {t.description && (
+                <p class="mt-2 text-xs text-on-surface-variant leading-relaxed">
+                  {t.description}
+                </p>
+              )}
+            </div>
+          </div>
+        ))
+      }
     </div>
   </section>
 
