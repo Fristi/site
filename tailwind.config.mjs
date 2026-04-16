@@ -1,5 +1,16 @@
 import defaultTheme from "tailwindcss/defaultTheme.js";
 import typography from "@tailwindcss/typography";
+import _flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette.js";
+const flattenColorPalette = _flattenColorPalette.default ?? _flattenColorPalette;
+
+/** @param {{ addBase: Function, theme: Function }} helpers */
+function addVariablesForColors({ addBase, theme }) {
+  const allColors = flattenColorPalette(theme("colors"));
+  const newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+  addBase({ ":root": newVars });
+}
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -44,8 +55,13 @@ export default {
       },
       animation: {
         "meteor-effect": "meteor 5s linear infinite",
+        aurora: "aurora 60s linear infinite",
       },
       keyframes: {
+        aurora: {
+          from: { backgroundPosition: "50% 50%, 50% 50%" },
+          to: { backgroundPosition: "350% 50%, 350% 50%" },
+        },
         meteor: {
           "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
           "70%": { opacity: "1" },
@@ -57,5 +73,5 @@ export default {
       },
     },
   },
-  plugins: [typography],
+  plugins: [typography, addVariablesForColors],
 };
