@@ -1,0 +1,210 @@
+---
+pubDate: "2026-06-01"
+banner: "/img/blog/mycelium/backend-banner.jpg"
+title: "Mycelium v2: the Scala backend"
+description: "REST API, PostgreSQL time-series storage, Auth0, and OpenAPI-driven clients for the plant monitoring cloud"
+draft: false
+series: "Mycelium v2"
+---
+
+In [edge-central](/blog/mycelium-v2-edge-central) we followed sensor data from BLE peripherals through the hub and into HTTP check-ins. That HTTP destination is the **backend** — a Scala service that owns user data, stores measurements, serves charts to the desktop app, and hands plant profiles back to the hub.
+
+This post covers what the backend does, how it is structured, and why we made a few specific choices (Tapir, Doobie, OpenAPI codegen) to keep the Rust edge and TypeScript app in sync.
+
+## Where the backend sits
+
+By the time data reaches us, the hard edge work is done. Peripherals have compressed their samples, the hub has synced time and plant profiles over BLE, and a batch of protobuf events has been converted to JSON. The backend's job is simpler but no less important:
+
+1. **Authenticate** every request via Auth0 JWT.
+2. **Register stations** keyed by MAC address, scoped to the authenticated user.
+3. **Ingest check-ins** — measurement ranges and watering events in a single PUT.
+4. **Serve aggregated history** for charts in the Tauri app.
+5. **Manage plant profiles** that edge-central pulls on a background timer.
+6. **Classify plants from photos** when a user uploads a station avatar.
+
+```
+edge-peripheral ──BLE──▶ edge-central ──HTTPS──▶ backend ──HTTPS──▶ app
+                              │                      │
+                              └── plant profiles ◀───┘
+```
+
+The hub never talks to the database directly. The app never talks to peripherals. The backend is the single source of truth for everything that outlives a BLE connection.
+
+## Stack
+
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Language | Scala 3.7 | ADTs for domain events, `derives` for JSON codecs, solid FP ecosystem |
+| Runtime | cats-effect `IO` | Same "describe effects, run on the edge" model we like in Rust |
+| HTTP | http4s Ember + Tapir | Type-safe endpoint descriptions that double as OpenAPI input |
+| Database | PostgreSQL + Doobie | Composable SQL, no ORM magic; `time_bucket` for chart aggregation |
+| Migrations | Flyway | Versioned SQL in `src/main/resources/migrations/` |
+| Auth | Auth0 JWKS + jwt-scala | Bearer tokens from device code (hub) or PKCE (app) |
+| Blobs | fs2-blobstore S3 (MinIO locally) | Station avatar images |
+| Config | ciris | Typed environment variables with defaults for local dev |
+| Container | Jib → distroless Java 17 | Multi-arch images without maintaining a Dockerfile |
+
+We deploy on port `8080` under the `/api` prefix. CORS is configured for the Tauri dev server on `localhost:1420`.
+
+## API design with Tapir
+
+Endpoints are declared once in `Stations.scala` and wired to a `StationService` implementation. Tapir gives us path/query/body schemas, bearer auth, and streaming bodies for avatar upload/download:
+
+```scala
+val checkIn = stationsSecured
+  .in(path[UUID]("stationId"))
+  .in("checkin")
+  .put
+  .in(jsonBody[List[CheckinEvent]])
+  .name("checkinStation")
+  .out(jsonBody[Int])
+```
+
+Secured routes extract the Auth0 `sub` claim and pass it to the service layer. Every mutating operation checks that the station belongs to that user before proceeding — there is no global station namespace.
+
+### OpenAPI and the TypeScript/Axios and Rust clients
+
+The edge-central hub does not hand-write HTTP calls. We generate a type-safe Rust client from the same Tapir definitions:
+
+1. `OpenApiGenerator` emits `openapi.json` from the live endpoint set.
+2. CI (via [Dagger](/blog/mycelium-v2-build-system)) runs OpenAPI Generator to produce `edge-client-backend`.
+3. edge-central imports that crate for `add_station`, `checkin_station`, and `get_profiles`.
+
+When the API changes, the Scala compiler and the generated Rust types fail together instead of silently diverging at runtime. The check-in payload is a good example: the hub sends JSON with a `_type` discriminator on each event, matching the Circe codec on the backend:
+
+```scala
+sealed trait CheckinEvent
+
+object CheckinEvent:
+  case class Measurement(
+      start: Instant,
+      end: Option[Instant],
+      battery: Int,
+      lux: Double,
+      temperature: Double,
+      humidity: Double,
+      soilPf: Double
+  ) extends CheckinEvent
+
+  case class Watering(
+      occurredAt: Instant,
+      durationMsec: Long
+  ) extends CheckinEvent
+```
+
+This mirrors the protobuf `Events` message on the wire and the `CheckinEvent` enum in the generated Rust client — one domain concept, three representations, one OpenAPI schema tying them together.
+
+In the app, we apply the same pattern we use the `openapi.json` from the backend to create a TypeScript/Axios client.
+
+## Authentication
+
+All secured endpoints use `auth.bearer[String]()`. The `Auth.validate` function:
+
+1. Parses the JWT header and reads the `kid`.
+2. Fetches the matching public key from Auth0's JWKS endpoint (cached for an hour).
+3. Verifies the signature and decodes the payload into `AccessToken(sub: String)`.
+
+The `sub` claim is the user ID stored on every station row. Hubs authenticate with refresh tokens obtained through the device code flow; the desktop app uses PKCE. Both end up as Bearer tokens on API calls — the backend does not distinguish how the token was issued.
+
+<Aside variant="info">
+Avatar viewing (`GET /stations/{id}/avatar`) is intentionally **unsecured** so image tags and simple links work without attaching a token. Upload and profile mutation remain protected.
+</Aside>
+
+## Check-in: ingesting a sync session
+
+The hub's sync loop ends with two calls per peripheral:
+
+```rust
+let station_id = default_api::add_station(configuration, station_insert).await?;
+default_api::checkin_station(configuration, &station_id.to_string(), Some(checkin_events)).await?;
+```
+
+`add_station` is idempotent in practice — the hub registers the station by MAC on every sync. `checkin_station` accepts a batch of events and returns the number of rows inserted.
+
+Inside `StationServiceImpl.checkin`:
+
+```scala
+val measurements = events.collect { case m: CheckinEvent.Measurement => m }
+val waterings    = events.collect { case w: CheckinEvent.Watering    => w }
+for {
+  measurementCount <- repos.measurements.insertMany(stationID, measurements)
+  wateringCount    <- repos.waterings.insertMany(stationID, waterings)
+} yield measurementCount + wateringCount
+```
+
+Measurements map directly to the v2 edge protocol: each `MeasurementRange` from the peripheral becomes one row with `occurred_on`, optional `ended_on`, and the scalar sensor fields. Watering events land in a separate `station_waterings` table with `occurred_at` and `duration_msec`.
+
+Batch insert via Doobie's `updateMany` keeps check-ins fast — a hub syncing six compressed ranges and one watering is a single round-trip per table, not eight individual INSERTs.
+
+## Charts: `time_bucket` aggregation
+
+The desktop app requests station details with an optional `period` query parameter (`last-24-hours`, `last-7-days`, `last-2-weeks`, `last-month`). The repository picks a bucket size and limit:
+
+```scala
+val timeBucket = period match {
+  case MeasurementPeriod.LastTwentyFourHours => fr"time_bucket('15 minutes', occurred_on)"
+  case MeasurementPeriod.LastSevenDays       => fr"time_bucket('1 day', occurred_on)"
+  // ...
+}
+```
+
+Fifteen-minute buckets for the last day, daily buckets for longer windows. The result is a `List[StationMeasurement]` bundled with the station metadata in `StationDetails` — ready for the React chart components without further processing in the app.
+
+## Plant profiles and the avatar pipeline
+
+Each station can have a `PlantProfile` — named target ranges for light (lux and μmol), temperature, humidity, soil moisture, and soil EC. Users set these through the app (`POST /profiles/profile/{stationId}`). The hub polls `GET /profiles` and caches them for BLE writes, as described in the [central post](/blog/mycelium-v2-edge-central).
+
+The more interesting path is **avatar upload**. When a user photographs their plant:
+
+1. The image streams to S3-compatible storage (MinIO in development).
+2. `OpenAiPlantClassifier` resizes the image and asks GPT-4o (structured JSON output) for possible plant names.
+3. `OpenPlantBookPlantProfiler` queries the [Open Plantbook](https://open.plantbook.io/) API for matching species and maps environmental ranges into our `PlantProfile` shape.
+4. The API returns a list of suggested profiles; the user picks one in the app.
+
+Both integrations are behind ports (`PlantClassifier`, `PlantProfiler`) with `production` and `constant` implementations — swap to `constant` in tests and offline development without touching the service layer.
+
+## Ports and adapters
+
+The service layer depends on traits, not implementations:
+
+```scala
+trait Repositories[F[_]] {
+  def waterings: StationWateringRepository[F]
+  def stationProfile: StationProfileRepository[F]
+  def stations: StationRepository[F]
+  def measurements: StationMeasurementRepository[F]
+}
+```
+
+Doobie repositories run in `ConnectionIO` and lift into `IO` through a `Transactor`. `cats-tagless` `FunctorK` lets us map the whole bundle across the transaction boundary in one line. Tests use Doobie-weaver against a real PostgreSQL instance (or Testcontainers) without starting http4s.
+
+This is not full hexagonal architecture for its own sake — it keeps OpenAI and Open Plantbook as replaceable adapters and makes `StationService` the single place to read business rules (ownership checks, check-in splitting, avatar orchestration).
+
+## Running locally
+
+```bash
+cd backend
+sbt run          # http://localhost:8080/api
+sbt test         # unit + integration tests
+sbt runMain co.mycelium.OpenApiGenerator   # refresh openapi.json
+```
+
+Environment variables (with ciris defaults for Postgres and MinIO):
+
+```bash
+PG_HOST=localhost
+PG_PORT=5432
+PG_DB=mycelium
+S3_HOST=http://127.0.0.1:9000
+AUTH0_BASE_URL=https://your-tenant.auth0.com
+PLANT_CLASSIFIER_IMPLEMENTATION=constant   # or production + OPENAI key
+PLANT_PROFILER_IMPLEMENTATION=constant     # or production + OPENPLANTBOOK key
+```
+
+Production images are built with sbt-jib as `mycelium-backend` on a distroless Java 17 base, published for `amd64` and `arm64`.
+
+## Conclusion
+
+The Mycelium backend is the contract between edge and UI. Tapir keeps that contract explicit and machine-readable. Doobie and Flyway keep persistence honest as the edge protocol evolves. Auth0 ties hub and app identities to the same user-scoped station list.
+
+With peripherals, firmware, the hub, and the cloud service described, the remaining piece in this series is the **desktop app** — how Tauri and React turn API responses into something you actually want to open while watering your plants.
