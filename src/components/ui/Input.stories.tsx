@@ -28,8 +28,8 @@ export const Form: Story = {
   render: () => (
     <div className="flex flex-col gap-6 max-w-sm p-8">
       <Input label="Full name" placeholder="Mark de Jong" />
-      <Input label="Email address" placeholder="mark@vectos.net" type="email" />
-      <Input label="Company" placeholder="Vectos" />
+      <Input label="Email address" placeholder="mail@markdejong.org" type="email" />
+      <Input label="Company" placeholder="Acme Inc." />
     </div>
   ),
 };
