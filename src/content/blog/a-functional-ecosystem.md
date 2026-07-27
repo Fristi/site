@@ -2,10 +2,10 @@
 pubDate: "2019-06-10"
 banner: "/img/blog/banner_functional_scala.jpg"
 title: "A functional ecosystem"
-description: "At DHL I built a microservice using cats, cats-effect, cats-tagless, refined, doobie, http4s and ZIO"
+description: "Building a microservice using cats, cats-effect, cats-tagless, refined, doobie, http4s and ZIO"
 ---
 
-In this post I would like to go over some of the tech I used to build a new micro-service at DHL and why these technologies and methodologies could be interesting as well for you. I had the freedom to pick new technologies.
+In this post I would like to go over some of the tech I used to build a new micro-service and why these technologies and methodologies could be interesting as well for you. I had the freedom to pick new technologies.
 
 Back to the project! I'm quite fond of functional programming and I decided to roll with a functional stack. The stack includes http4s, circe, refined, doobie, cats, cats-tagless, cats-effect and on top of that ZIO.
 

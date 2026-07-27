@@ -212,4 +212,4 @@ By using the oracle pattern we solve a few problems at once:
 - Encoding/decoding symmetry is verified from the domain model to the database and back.
 - Service layer tests use an in-memory model that has been proven to mirror the real implementation — no mocks that can silently lie.
 
-I've coded the `Mirra` library and you can find it [here](https://github.com/Fristi/mirra). It's a proof of concept, but I've used this methodology at DHL Netherlands. Note that the project is not actively maintained, but it remains a useful reference or starting point for anyone who wants to adopt this pattern.
+I've coded the `Mirra` library and you can find it [here](https://github.com/Fristi/mirra). It's a proof of concept, but I've used this methodology in production. Note that the project is not actively maintained, but it remains a useful reference or starting point for anyone who wants to adopt this pattern.
