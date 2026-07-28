@@ -483,25 +483,62 @@ const certs = [
         Worked for
       </h2>
       <p class="mt-2 text-base text-on-surface-variant">
-        I served these employers to be successful in the digital world
+        Consultancies and agencies I've worked with, and the clients I served
+        through them
       </p>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-2">
+    <div class="grid gap-6">
       <Client
-        image="/img/companies/ing.png"
-        name="ING"
-        description="The ING Group is a Dutch multinational banking and financial services corporation. I've worked at ING on approval software."
+        image="/img/companies/vectos.png"
+        name="Vectos"
+        description="Software consulting in Scala and Rust."
+        clients={[
+          {
+            image: "/img/companies/dhl.png",
+            name: "DHL",
+            description:
+              "DHL German international courier, package delivery and express mail service. I've worked at DHL on several high-end web applications.",
+          },
+          {
+            image: "/img/companies/vandebron.png",
+            name: "Vandebron",
+            description:
+              "Vandebron is a Dutch green energy marketplace that connects households and businesses directly with local renewable producers—like farmers with wind turbines, solar panels, or biogas—without owning any generation assets.",
+          },
+        ]}
       />
       <Client
-        image="/img/companies/veon.png"
-        name="Veon"
-        description="VEON is a Dutch-domiciled multinational telecommunication services. It predominantly operates services in the regions of Asia, Africa and Europe. I've worked at VEON on the top up transactional systems."
+        image="/img/companies/lunatech.png"
+        name="Lunatech"
+        description="Software consulting in Scala, Kotlin and Java."
+        clients={[
+          {
+            image: "/img/companies/ing.png",
+            name: "ING",
+            description:
+              "The ING Group is a Dutch multinational banking and financial services corporation. I've worked at ING on approval software.",
+          },
+          {
+            image: "/img/companies/veon.png",
+            name: "Veon",
+            description:
+              "VEON is a Dutch-domiciled multinational telecommunication services. It predominantly operates services in the regions of Asia, Africa and Europe. I've worked at VEON on the top up transactional systems.",
+          },
+        ]}
       />
       <Client
-        image="/img/companies/malmberg.svg"
-        name="Malmberg"
-        description="Malmberg is a Dutch company which creates educational software and books for schools. I've worked on Malmberg on a content management system (CMS) for educational software."
+        image="/img/companies/q42.svg"
+        name="Q42"
+        description="Web agency working across languages like C#, Go and Scala."
+        clients={[
+          {
+            image: "/img/companies/malmberg.svg",
+            name: "Malmberg",
+            description:
+              "Malmberg is a Dutch company which creates educational software and books for schools. I've worked on Malmberg on a content management system (CMS) for educational software.",
+          },
+        ]}
       />
     </div>
   </section>

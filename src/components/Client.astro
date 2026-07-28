@@ -1,22 +1,75 @@
 ---
-type Props = {
+type ClientItem = {
   image: string;
   name: string;
   description: string;
 };
 
-const { image, name, description } = Astro.props;
+type Props = {
+  image: string;
+  name: string;
+  description: string;
+  clients?: ClientItem[];
+};
+
+const { image, name, description, clients = [] } = Astro.props;
 ---
 
-<div class="relative flex gap-5 rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6 transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
-  <div class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]" aria-hidden />
-  <div class="relative flex-shrink-0">
-    <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-highest">
-      <img src={image} alt={name} class="h-10 w-10 object-contain" />
+<div
+  class="relative rounded-2xl border border-outline-variant/20 bg-surface-high/40 backdrop-blur-[16px] p-6 transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]"
+>
+  <div
+    class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+    aria-hidden
+  >
+  </div>
+
+  <div class="relative flex gap-5">
+    <div class="flex-shrink-0">
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-highest"
+      >
+        <img src={image} alt={name} class="h-10 w-10 object-contain" />
+      </div>
+    </div>
+    <div>
+      <h3 class="font-display font-semibold text-base text-on-surface">{name}</h3>
+      <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">
+        {description}
+      </p>
     </div>
   </div>
-  <div class="relative">
-    <h3 class="font-display font-semibold text-sm text-on-surface">{name}</h3>
-    <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">{description}</p>
-  </div>
+
+  {
+    clients.length > 0 && (
+      <div class="relative mt-6 border-t border-outline-variant/15 pt-5">
+        <p class="text-xs font-mono uppercase tracking-wider text-on-surface-variant/60">
+          Clients
+        </p>
+        <ul class="mt-4 space-y-4">
+          {clients.map((client) => (
+            <li class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-surface-highest">
+                  <img
+                    src={client.image}
+                    alt={client.name}
+                    class="h-7 w-7 object-contain"
+                  />
+                </div>
+              </div>
+              <div>
+                <p class="font-display font-semibold text-sm text-on-surface">
+                  {client.name}
+                </p>
+                <p class="mt-1 text-sm text-on-surface-variant leading-relaxed">
+                  {client.description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 </div>
