@@ -82,7 +82,7 @@ function buildDocx(data: Cv) {
       spacing: { after: 200 },
       children: [
         new TextRun({
-          text: `${data.email}   ${data.websiteLabel}   ${data.githubLabel}`,
+          text: `${data.websiteLabel}   ${data.githubLabel}`,
           color: muted,
           size: 20,
           font: "Calibri",

@@ -44,7 +44,6 @@ export type CvCertification = {
 export type Cv = {
   name: string;
   role: string;
-  email: string;
   website: string;
   websiteLabel: string;
   github: string;

@@ -85,7 +85,6 @@
     #text(size: 22pt, weight: "bold", cv.name)
     #v(0.3em)
     #text(size: 9.5pt, fill: muted)[
-      #link("mailto:" + cv.email)[#cv.email] #h(1em)
       #link(cv.website)[#cv.websiteLabel] #h(1em)
       #link(cv.github)[#cv.githubLabel]
     ]

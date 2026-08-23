@@ -7,7 +7,6 @@ import type { Cv } from "./types";
 export const cv: Cv = {
   name: "Mark de Jong",
   role: "Software Engineer",
-  email: "mail@markdejong.org",
   website: "https://markdejong.org",
   websiteLabel: "markdejong.org",
   github: "https://github.com/Fristi",
