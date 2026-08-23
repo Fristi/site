@@ -19,4 +19,8 @@ export default defineConfig({
   },
   output: "server",
   adapter: netlify(),
+  server: {
+    host: true,
+    port: 3000,
+  },
 });

@@ -3,12 +3,13 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "dev": "astro dev --host 0.0.0.0 --port 3000",
+    "start": "astro dev --host 0.0.0.0 --port 3000",
+    "build": "npm run export-cv && astro build",
+    "export-cv": "tsx scripts/export-cv.ts",
     "preview": "astro preview",
     "astro": "astro",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --host 0.0.0.0",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -37,8 +38,10 @@
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/react": "^8.6.18",
     "@storybook/react-vite": "^8.6.18",
+    "docx": "^9.7.1",
     "prettier": "2.8.8",
     "prettier-plugin-astro": "^0.8.0",
-    "storybook": "^8.6.18"
+    "storybook": "^8.6.18",
+    "tsx": "^4.23.12"
   }
 }

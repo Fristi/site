@@ -1,6 +1,7 @@
 {
   "name": "markdejong.org",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "appPort": ["3000:3000", "6006:6006"],
   "forwardPorts": [3000, 6006],
   "portsAttributes": {
     "3000": {
@@ -11,6 +12,9 @@
       "label": "Storybook",
       "onAutoForward": "notify"
     }
+  },
+  "features": {
+    "ghcr.io/michidk/devcontainers-features/typst:1": {}
   },
   "postCreateCommand": "npm install",
   "customizations": {

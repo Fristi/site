@@ -1,0 +1,311 @@
+---
+import Layout from "../components/Layout.astro";
+import TechItem from "../components/TechItem.astro";
+import { cv } from "../cv/data";
+
+const sectionTitle =
+  "font-display text-[2rem] font-bold tracking-[-0.01em] text-on-surface";
+const sectionLead = "mt-2 text-base text-on-surface-variant";
+---
+
+<Layout title={`${cv.name} — CV`} description={cv.introduction[0]}>
+  <article class="mx-auto max-w-4xl">
+    <header class="border-b border-outline-variant/20 pb-10">
+      <p class="text-xs font-mono uppercase tracking-[0.2em] text-primary">
+        Curriculum Vitae
+      </p>
+      <div
+        class="mt-3 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <div>
+          <h1
+            class="font-display font-extrabold text-[3rem] leading-[1.1] tracking-[-0.02em] text-on-surface"
+          >
+            {cv.name}
+          </h1>
+          <p class="mt-2 text-lg text-on-surface-variant">{cv.role}</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href={cv.downloads.pdf}
+            download
+            class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-4 py-2 text-sm transition-all duration-200 bg-primary text-on-primary shadow-[0_0_20px_2px_rgba(79,70,229,0.25)] hover:shadow-[0_0_32px_4px_rgba(79,70,229,0.35)] hover:brightness-105"
+          >
+            Download PDF
+          </a>
+          <a
+            href={cv.downloads.docx}
+            download
+            class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-4 py-2 text-sm transition-all duration-200 border border-outline-variant/30 bg-surface-high/40 text-on-surface hover:border-outline-variant/50"
+          >
+            Download Word
+          </a>
+        </div>
+      </div>
+      <p class="mt-6 text-sm text-on-surface-variant">
+        <a
+          href={`mailto:${cv.email}`}
+          class="hover:text-primary transition-colors">{cv.email}</a
+        >
+        <span class="mx-2 text-outline-variant">·</span>
+        <a href={cv.website} class="hover:text-primary transition-colors"
+          >{cv.websiteLabel}</a
+        >
+        <span class="mx-2 text-outline-variant">·</span>
+        <a href={cv.github} class="hover:text-primary transition-colors"
+          >{cv.githubLabel}</a
+        >
+        <span class="mx-2 text-outline-variant">·</span>
+        <a href={cv.linkedin} class="hover:text-primary transition-colors"
+          >LinkedIn</a
+        >
+      </p>
+    </header>
+
+    <section class="mt-12">
+      <h2 class={sectionTitle}>Introduction</h2>
+      {
+        cv.introduction.map((p) => (
+          <p class="mt-4 font-body text-base leading-relaxed text-on-surface-variant">
+            {p}
+          </p>
+        ))
+      }
+    </section>
+
+    <section class="mt-16">
+      <h2 class={sectionTitle}>Work experience</h2>
+      <p class={sectionLead}>
+        Roles at consultancies and product companies
+      </p>
+
+      <ol class="relative mt-10 ml-3 space-y-10 border-l border-outline-variant/25">
+        {
+          cv.experience.map((job) => (
+            <li class="relative pl-8">
+              <span
+                class="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-void"
+                aria-hidden
+              />
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex items-start gap-3">
+                  {job.logo ? (
+                    <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-surface-highest">
+                      <img src={job.logo} alt="" class="h-7 w-7 object-contain" />
+                    </div>
+                  ) : (
+                    <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-surface-highest font-display text-sm font-bold text-primary">
+                      {job.company.charAt(0)}
+                    </div>
+                  )}
+                  <div>
+                    <h3 class="font-display font-semibold text-lg leading-snug text-on-surface">
+                      {job.role}
+                    </h3>
+                    <p class="text-sm font-medium text-primary">{job.company}</p>
+                  </div>
+                </div>
+                <p class="text-xs font-mono text-on-surface-variant/70 sm:pt-1 sm:text-right">
+                  {job.period}
+                </p>
+              </div>
+              {job.summary && (
+                <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
+                  {job.summary}
+                </p>
+              )}
+              <ul class="mt-3 space-y-2">
+                {job.bullets.map((b) => (
+                  <li class="pl-1 text-sm leading-relaxed text-on-surface-variant">
+                    <span class="mr-2 text-primary">•</span>
+                    {b.lead ? (
+                      <>
+                        <span class="font-semibold text-on-surface">{b.lead}</span>
+                        {" — "}
+                        {b.text}
+                      </>
+                    ) : (
+                      b.text
+                    )}
+                  </li>
+                ))}
+              </ul>
+              {job.skills.length > 0 && (
+                <p class="mt-3 text-xs italic leading-relaxed text-on-surface-variant/70">
+                  Skills: {job.skills.join(", ")}
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-16">
+      <h2 class={sectionTitle}>Tech volunteer</h2>
+      <p class={sectionLead}>
+        During the years I gave talks for free, contributed to OSS projects and
+        also had my own OSS projects
+      </p>
+
+      <div class="mt-10 grid gap-8 lg:grid-cols-2">
+        <div
+          class="relative rounded-2xl border border-outline-variant/20 bg-surface-high/40 p-6 backdrop-blur-[16px]"
+        >
+          <div
+            class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+            aria-hidden
+          >
+          </div>
+          <h3 class="font-display text-lg font-semibold text-on-surface">
+            Talks Given
+          </h3>
+          <p class="mt-2 text-sm text-on-surface-variant">
+            Mostly talks at meetups and companies
+          </p>
+          <ul class="mt-6 space-y-6">
+            {
+              cv.talks.map((talk) => (
+                <li>
+                  <p class="font-mono text-xs text-on-surface-variant/60">
+                    {talk.date}
+                  </p>
+                  <a
+                    href={talk.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="mt-1 block text-base font-semibold text-primary transition-colors hover:text-primary-container"
+                  >
+                    {talk.name}
+                  </a>
+                  <p class="mt-1 text-sm leading-relaxed text-on-surface-variant">
+                    {talk.description}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div
+          class="relative rounded-2xl border border-outline-variant/20 bg-surface-high/40 p-6 backdrop-blur-[16px]"
+        >
+          <div
+            class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-secondary to-primary opacity-[0.03]"
+            aria-hidden
+          >
+          </div>
+          <h3 class="font-display text-lg font-semibold text-on-surface">
+            Open Source Projects
+          </h3>
+          <p class="mt-2 text-sm text-on-surface-variant">
+            Public work and contributions available online.
+          </p>
+          <ul class="mt-6 space-y-6">
+            {
+              cv.projects.map((project) => (
+                <li>
+                  <p class="font-mono text-xs text-on-surface-variant/60">
+                    {project.date}
+                  </p>
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="mt-1 block text-base font-semibold text-primary transition-colors hover:text-primary-container"
+                  >
+                    {project.name}
+                  </a>
+                  <p class="mt-1 text-sm leading-relaxed text-on-surface-variant">
+                    {project.description}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <h2 class={sectionTitle}>Technologies</h2>
+      <p class={sectionLead}>
+        Languages, tools and platforms I've worked with over the years
+      </p>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        {
+          cv.technologies.map((t) => (
+            <div class="relative flex items-start gap-4 rounded-2xl border border-outline-variant/20 bg-surface-high/40 p-5 backdrop-blur-[16px] transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
+              <div
+                class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+                aria-hidden
+              />
+              <div class="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-surface-highest">
+                <TechItem tech={t.icon} showLabel={false} iconClass="w-7 h-7" />
+              </div>
+              <div class="relative min-w-0 flex-1">
+                <p class="font-display text-sm font-bold text-on-surface">
+                  {t.name}
+                </p>
+                <div class="mt-2 flex items-center gap-2">
+                  <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-highest">
+                    <div
+                      class="h-full rounded-full bg-primary"
+                      style={`width: ${t.mastery}%`}
+                    />
+                  </div>
+                  <span class="flex-shrink-0 font-mono text-xs text-on-surface-variant/60">
+                    {t.mastery}%
+                  </span>
+                </div>
+                {t.description && (
+                  <p class="mt-2 text-xs leading-relaxed text-on-surface-variant">
+                    {t.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <h2 class={sectionTitle}>Certified</h2>
+      <p class={sectionLead}>
+        Driven to keep up with latest trends and technologies
+      </p>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        {
+          cv.certifications.map((cert) => (
+            <div class="relative flex gap-5 rounded-2xl border border-outline-variant/20 bg-surface-high/40 p-6 backdrop-blur-[16px] transition-all duration-300 hover:border-outline-variant/30 hover:shadow-[0_0_30px_2px_rgba(153,247,255,0.06)]">
+              <div
+                class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container opacity-[0.03]"
+                aria-hidden
+              />
+              <div class="relative flex-shrink-0">
+                <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-highest">
+                  <img
+                    src={cert.image}
+                    alt=""
+                    class="h-10 w-10 object-contain"
+                  />
+                </div>
+              </div>
+              <div class="relative">
+                <h3 class="font-display text-sm font-semibold leading-snug text-on-surface">
+                  {cert.title}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
+                  {cert.description}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+</Layout>

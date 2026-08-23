@@ -23,3 +23,8 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Generated CV artifacts (from src/cv/data.ts)
+cv/cv.json
+public/cv/*.pdf
+public/cv/*.docx
