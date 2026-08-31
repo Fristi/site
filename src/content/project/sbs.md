@@ -1,6 +1,6 @@
 ---
 pubDate: "2021-06-01"
-banner: "/img/projects/sbs/logo.png"
+banner: "/img/projects/sbs/invoices.png"
 title: "DHL Self Billing"
 description: "A single-page web application used create invoices"
 tech:

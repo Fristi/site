@@ -7,11 +7,12 @@ type Props = {
 const { text, result } = Astro.props;
 ---
 
-<div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
-  <dt class="text-sm font-medium text-gray-500 truncate">
-    {text}
-  </dt>
-  <dd class="mt-1 text-3xl font-semibold text-gray-900">
-    {result}
+<div class="rounded-2xl border border-outline-variant/20 bg-surface-high/40 px-5 py-6 backdrop-blur-[16px]">
+  <dt class="text-sm text-on-surface-variant">{text}</dt>
+  <dd
+    class="mt-2 font-display text-3xl font-semibold tracking-tight text-on-surface"
+    data-count={result}
+  >
+    {result.toLocaleString("en-US")}
   </dd>
 </div>

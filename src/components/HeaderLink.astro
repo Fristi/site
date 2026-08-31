@@ -7,22 +7,25 @@ type Props = HTMLAttributes<"a">;
 const uaString = Astro.request.headers.get("user-agent");
 const { isMobile } = useUserAgent(uaString);
 const { href, ...props } = Astro.props;
-const link = href?.toString();
-const { pathname } = Astro.url;
+const link = (href?.toString() || "/").replace(/\/$/, "") || "/";
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
-const isActive = link === pathname || link === pathname.replace(/\/$/, "");
+const isActive =
+  link === "/" ? path === "/" : path === link || path.startsWith(`${link}/`);
 
 const baseStyles = !isMobile
   ? "inline-flex items-center px-3 py-1.5 rounded-xl text-sm font-medium transition-colors"
   : "block px-3 py-2 rounded-xl text-sm font-medium transition-colors";
 
-const activeStyles = isActive
-  ? "text-primary bg-primary/10"
-  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-high/50";
-
-const styles = baseStyles + " " + activeStyles;
+const styles = `${baseStyles} text-on-surface-variant hover:text-on-surface hover:bg-surface-high/50 aria-[current=page]:text-primary aria-[current=page]:bg-primary/10 aria-[current=page]:hover:text-primary`;
 ---
 
-<a href={href} class={styles} {...props}>
+<a
+  href={href}
+  class={styles}
+  data-nav-link
+  aria-current={isActive ? "page" : undefined}
+  {...props}
+>
   <slot />
 </a>

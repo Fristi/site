@@ -1,14 +1,15 @@
 ---
 import Layout from "../components/Layout.astro";
+
 ---
 
 <Layout>
   <!-- Hero -->
-  <section class="mt-8 lg:grid lg:grid-cols-2 lg:gap-16 items-start">
-    <div class="relative max-w-2xl">
+  <section class="mt-8 items-start lg:grid lg:grid-cols-2 lg:gap-16">
+    <div class="relative max-w-2xl" data-animate="fade-up">
       <!-- Display heading -->
       <h1
-        class="font-display font-extrabold text-[3.5rem] leading-[1.1] tracking-[-0.02em] text-on-surface"
+        class="font-display text-[3.5rem] font-extrabold leading-[1.1] tracking-[-0.02em] text-on-surface"
       >
         Mark de Jong
       </h1>
@@ -20,13 +21,13 @@ import Layout from "../components/Layout.astro";
           href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
           target="_blank"
           rel="noreferrer"
-          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 bg-primary text-on-primary shadow-[0_0_20px_2px_rgba(79,70,229,0.25)] hover:shadow-[0_0_32px_4px_rgba(79,70,229,0.35)] hover:brightness-105"
+          class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-body text-sm font-medium text-on-primary shadow-[0_0_20px_2px_rgba(79,70,229,0.25)] transition-all duration-200 hover:brightness-105 hover:shadow-[0_0_32px_4px_rgba(79,70,229,0.35)]"
         >
           Get in touch
         </a>
         <a
           href="/about"
-          class="inline-flex items-center justify-center gap-2 rounded-xl font-body font-medium px-5 py-2.5 text-sm transition-all duration-200 border border-outline-variant/30 bg-surface-high/40 text-on-surface hover:border-outline-variant/50"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-outline-variant/30 bg-surface-high/40 px-5 py-2.5 font-body text-sm font-medium text-on-surface transition-all duration-200 hover:border-outline-variant/50"
         >
           View CV
         </a>
@@ -37,7 +38,7 @@ import Layout from "../components/Layout.astro";
         <a
           target="_blank"
           href="https://github.com/Fristi"
-          class="text-on-surface-variant hover:text-primary transition-colors"
+          class="text-on-surface-variant transition-colors hover:text-primary"
           aria-label="GitHub"
         >
           <svg
@@ -55,7 +56,7 @@ import Layout from "../components/Layout.astro";
         <a
           target="_blank"
           href="https://www.linkedin.com/in/mark-de-jong-a808b7167"
-          class="text-on-surface-variant hover:text-primary transition-colors"
+          class="text-on-surface-variant transition-colors hover:text-primary"
           aria-label="LinkedIn"
         >
           <svg
@@ -72,9 +73,10 @@ import Layout from "../components/Layout.astro";
       </div>
     </div>
     <!-- Sketch portrait — blends into background via multiply -->
-    <div class="mt-12 lg:mt-0">
+    <div class="mt-12 overflow-hidden rounded-2xl ring-1 ring-outline-variant/20 lg:mt-0">
       <img
-        class="w-full rounded-2xl object-cover ring-1 ring-outline-variant/20"
+        data-animate="scale-img"
+        class="w-full object-cover will-change-transform"
         src="/img/collage.jpg"
         alt="Mark"
       />

@@ -10,16 +10,14 @@ const { tech } = Astro.props;
 
 {
   tech && (
-    <div class="my-12">
-      <div class="lg:text-center">
-        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Tech & Tools
-        </p>
-        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-          Technologies and tools we've used
-        </p>
-      </div>
-      <div class="flex flex-wrap items-center justify-center">
+    <div class="mt-20" data-animate="fade-up">
+      <p class="text-xs font-mono uppercase tracking-[0.2em] text-primary">
+        Stack
+      </p>
+      <h2 class="mt-3 font-display text-2xl font-bold tracking-[-0.01em] text-on-surface md:text-3xl">
+        Tech & tools
+      </h2>
+      <div class="mt-8 flex flex-wrap items-center justify-center">
         <TechItems tech={tech} />
       </div>
     </div>

@@ -49,6 +49,7 @@ import Footer from "../components/Footer.astro";
         <div class="hidden items-center gap-1 md:flex">
           <HeaderLink href="/">Home</HeaderLink>
           <HeaderLink href="/about">About</HeaderLink>
+          <HeaderLink href="/project">Projects</HeaderLink>
           <HeaderLink href="/blog">Blog</HeaderLink>
         </div>
       </nav>
@@ -57,11 +58,12 @@ import Footer from "../components/Footer.astro";
         <div class="flex flex-col gap-1">
           <HeaderLink href="/">Home</HeaderLink>
           <HeaderLink href="/about">About</HeaderLink>
+          <HeaderLink href="/project">Projects</HeaderLink>
           <HeaderLink href="/blog">Blog</HeaderLink>
         </div>
       </div>
 
-      <main class="px-4 py-10 md:px-8 md:py-16">
+      <main id="swup" class="transition-fade px-4 py-10 md:px-8 md:py-16">
         <slot />
       </main>
 
@@ -76,5 +78,10 @@ import Footer from "../components/Footer.astro";
     navButton?.addEventListener("click", () => {
       navBar?.classList.toggle("hidden");
     });
+  </script>
+
+  <script>
+    import { boot } from "../lib/page";
+    boot();
   </script>
 </>

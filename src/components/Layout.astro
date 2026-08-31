@@ -5,11 +5,13 @@ import BaseHead from "./BaseHead.astro";
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
 const {
   title = "Mark de Jong",
   description = "Software development",
+  image = "/img/logo.png",
 } = Astro.props;
 ---
 
@@ -18,7 +20,7 @@ const {
   <BaseHead
     description={description}
     title={title}
-    image="/img/logo.png"
+    image={image}
   />
   <Shell>
     <slot />

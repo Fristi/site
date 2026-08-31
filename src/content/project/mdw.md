@@ -1,6 +1,6 @@
 ---
 pubDate: "2021-03-01"
-banner: "/img/projects/mdw/truck-bounce.svg"
+banner: "/img/projects/mdw/Dashboard.png"
 title: "My DHL Work"
 description: "A single-page web application used to onboard and support couriers."
 tech:

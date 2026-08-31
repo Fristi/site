@@ -1,0 +1,37 @@
+---
+type Props = {
+  title: string;
+  description: string;
+  image: string;
+  flip?: boolean;
+};
+
+const { title, description, image, flip = false } = Astro.props;
+---
+
+<section
+  class="mt-20 grid items-center gap-10 lg:mt-28 lg:grid-cols-2 lg:gap-16"
+  data-animate="fade-up"
+>
+  <div class:list={[flip && "lg:order-2"]}>
+    <h2 class="font-display text-2xl font-bold tracking-[-0.01em] text-on-surface md:text-3xl">
+      {title}
+    </h2>
+    <p class="mt-4 whitespace-pre-line text-base leading-relaxed text-on-surface-variant">
+      {description}
+    </p>
+  </div>
+  <div
+    class:list={[
+      "overflow-hidden rounded-2xl border border-outline-variant/20 shadow-[0_20px_50px_-24px_rgba(15,23,42,0.45)]",
+      flip && "lg:order-1",
+    ]}
+  >
+    <img
+      data-animate="scale-img"
+      class="aspect-[4/3] w-full object-cover will-change-transform"
+      src={image}
+      alt={title}
+    />
+  </div>
+</section>
