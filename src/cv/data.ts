@@ -310,10 +310,10 @@ export const cv: Cv = {
       description: "tokio, axum, sqlx, reqwest, serde, clap, embassy",
     },
     {
-      icon: "astro",
+      icon: "react",
       name: "React",
       mastery: 70,
-      description: "Next.js, Astro",
+      description: "Next.js",
     },
     {
       icon: "kubernetes",
@@ -408,7 +408,7 @@ export const cv: Cv = {
     },
     {
       category: "Frontend",
-      detail: "React, Next.js, Astro",
+        detail: "React, Next.js",
     },
     {
       category: "Backend / FP ecosystem",
