@@ -11,7 +11,6 @@ export const cv: Cv = {
   websiteLabel: "markdejong.org",
   github: "https://github.com/Fristi",
   githubLabel: "github.com/Fristi",
-  linkedin: "https://www.linkedin.com/in/mark-de-jong-a808b7167",
   downloads: {
     pdf: "/cv/mark-de-jong.pdf",
     docx: "/cv/mark-de-jong.docx",
