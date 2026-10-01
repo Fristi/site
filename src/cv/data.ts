@@ -57,6 +57,12 @@ export const cv: Cv = {
         "ArgoCD",
         "Event Sourcing",
         "Hexagonal Architecture",
+        "Rust",
+        "Axum",
+        "Tokio",
+        "Sqlx",
+        "Serde",
+        "Amazon AWS"
       ],
     },
     {
