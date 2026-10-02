@@ -111,24 +111,6 @@
   ..cv.certifications.map(c => [• #c.title]),
 )
 
-#section-heading("Talks")
-
-#for talk in cv.talks {
-  named-row(
-    if talk.url != "" { link(talk.url)[#talk.name] } else { talk.name },
-    talk.description,
-  )
-}
-
-#section-heading("Solo Open Source Projects")
-
-#for project in cv.projects {
-  named-row(
-    if project.url != "" { link(project.url)[#project.name] } else { project.name },
-    project.description,
-  )
-}
-
 #v(0.3em)
 #text(size: 8.5pt, fill: muted)[
   All projects and talk slides available at #link(cv.github)[#cv.githubLabel]
