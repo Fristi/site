@@ -103,6 +103,8 @@
   job(entry)
 }
 
+#pagebreak()
+
 #section-heading("Certifications")
 
 #grid(
